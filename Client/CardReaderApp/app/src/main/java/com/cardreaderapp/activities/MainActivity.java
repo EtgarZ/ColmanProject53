@@ -1,4 +1,4 @@
-package com.cardreaderapp;
+package com.cardreaderapp.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,11 +7,20 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.cardreaderapp.R;
+import com.cardreaderapp.api.RestService;
+import com.cardreaderapp.models.Card;
+import com.cardreaderapp.utils.Base64Converter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.List;
@@ -41,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap )data.getExtras().get("data");
+        final Bitmap bitmap = (Bitmap )data.getExtras().get("data");
         imageView.setImageBitmap(bitmap);
 
         Button btnExtractInfo = findViewById(R.id.btnExtractInfo);
@@ -50,20 +59,8 @@ public class MainActivity extends AppCompatActivity {
         btnExtractInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Connect to server and send bitmap. wait for response
-//                Socket socket = serverSocket.accept();
-//                InputStream inputStream = socket.getInputStream();
-//                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//                String content = br.readLine();
-//                System.out.println(content);
-
-                String contactData = "{'Name':'Moti Levi'" +
-                        ",'Phone':'08-678943212'" +
-                        "'Email':'Moti.Levi22@gmail.com'";
-
-                String name = "Moti Levi";
-                String phone = "08-678943212";
-                String email = "Moti.Levi22@gmail.com";
+                String encodedBitmap = Base64Converter.ConvertToBase64(bitmap);
+                Card card = RestService.GetRestService().GetCardData(encodedBitmap);
 
                 // Open contact member and fill details
                 // Create intent contact-add
@@ -71,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
                 // Get card data to contact member
-                intent.putExtra(ContactsContract.Intents.Insert.NAME, name)
-                        .putExtra(ContactsContract.Intents.Insert.PHONE, phone)
+                intent.putExtra(ContactsContract.Intents.Insert.NAME, card.GetPersonName())
+                        .putExtra(ContactsContract.Intents.Insert.PHONE, card.GetPhoneNumber())
                         .putExtra(ContactsContract.Intents.Insert.PHONE_TYPE,
                                 ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
-                        .putExtra(ContactsContract.Intents.Insert.EMAIL, email)
+                        .putExtra(ContactsContract.Intents.Insert.EMAIL, card.GetEmail())
                         .putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE,
                                 ContactsContract.CommonDataKinds.Email.TYPE_WORK);
 
