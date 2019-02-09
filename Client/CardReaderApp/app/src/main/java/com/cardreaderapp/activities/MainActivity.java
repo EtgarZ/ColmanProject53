@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,23 +61,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String encodedBitmap = Base64Converter.ConvertToBase64(bitmap);
-                Card card = RestService.GetRestService().GetCardData(encodedBitmap);
+                Card card = null;
+                try {
+                    card = RestService.GetRestService().GetCardData("bla.jpg", encodedBitmap);
 
-                // Open contact member and fill details
-                // Create intent contact-add
-                Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
-                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                    // Open contact member and fill details
+                    // Create intent contact-add
+                    Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+                    intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-                // Get card data to contact member
-                intent.putExtra(ContactsContract.Intents.Insert.NAME, card.GetPersonName())
-                        .putExtra(ContactsContract.Intents.Insert.PHONE, card.GetPhoneNumber())
-                        .putExtra(ContactsContract.Intents.Insert.PHONE_TYPE,
-                                ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
-                        .putExtra(ContactsContract.Intents.Insert.EMAIL, card.GetEmail())
-                        .putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE,
-                                ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+                    // Get card data to contact member
+                    intent.putExtra(ContactsContract.Intents.Insert.NAME, card.GetPersonName())
+                            .putExtra(ContactsContract.Intents.Insert.PHONE, card.GetPhoneNumber())
+                            .putExtra(ContactsContract.Intents.Insert.PHONE_TYPE,
+                                    ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
+                            .putExtra(ContactsContract.Intents.Insert.EMAIL, card.GetEmail())
+                            .putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE,
+                                    ContactsContract.CommonDataKinds.Email.TYPE_WORK);
 
-                startActivity(intent);
+                    startActivity(intent);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
