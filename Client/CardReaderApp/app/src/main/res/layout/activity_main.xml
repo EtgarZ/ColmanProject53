@@ -9,7 +9,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -21,11 +20,22 @@
         android:layout_height="match_parent" />
 
     <Button
+        android:id="@+id/btnPickImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_dark"
+        android:text="Pick Image From Gallery"
+        android:textColor="@android:color/holo_blue_dark"
+        android:visibility="visible" />
+
+    <Button
         android:id="@+id/btnCamera"
+        app:layout_constraintTop_toBottomOf="@id/btnPickImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_orange_dark"
         android:textColor="@android:color/holo_blue_dark"
+        android:layout_marginTop="10px"
         android:text="Capture new card"
         />
 
@@ -40,5 +50,7 @@
         android:layout_marginTop="10px"
         android:visibility="invisible"
         />
+
+
 
 </android.support.constraint.ConstraintLayout>
