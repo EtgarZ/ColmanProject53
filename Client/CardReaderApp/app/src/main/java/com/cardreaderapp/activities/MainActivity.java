@@ -75,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
+            if (data == null)
+                return;
+            
             Button btnExtractInfo = findViewById(R.id.btnExtractInfo);
             btnExtractInfo.setVisibility(View.VISIBLE);
 
