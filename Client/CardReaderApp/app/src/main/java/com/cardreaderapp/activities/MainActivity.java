@@ -31,6 +31,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (data == null)
                 return;
-            
+
             Button btnExtractInfo = findViewById(R.id.btnExtractInfo);
             btnExtractInfo.setVisibility(View.VISIBLE);
 
@@ -112,13 +113,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void ExtractDataAndOpenContact(Bitmap bitmap)
     {
-        String encodedBitmap = Base64Converter.ConvertToBase64(bitmap);
-        Card card = null;
         try {
-//                          DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-//                          Calendar cal = Calendar.getInstance();
-//                          card = RestService.GetRestService().GetCardData( dateFormat.format(cal)+".jpg", encodedBitmap);
-            card = RestService.GetRestService().GetCardData( "bla.jpg", encodedBitmap);
+            String encodedBitmap = Base64Converter.ConvertToBase64(bitmap);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            String currentDateTimeString = dateFormat.format(new Date());
+            Card card = RestService.GetRestService().GetCardData( currentDateTimeString+".jpg", encodedBitmap);
 
             // Create intent contact-add
             Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
