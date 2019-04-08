@@ -8,9 +8,17 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_width="378dp"
+        android:layout_height="381dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnExtractInfo" />
 
     <Button
@@ -34,19 +42,6 @@
         app:layout_constraintTop_toBottomOf="@+id/btnPickImage" />
 
     <!-- Image Cropper fill the remaining available height -->
-    <com.theartofdev.edmodo.cropper.CropImageView xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cropImageView"
-        android:layout_width="384dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="48dp"
-        android:layout_weight="1"
-        custom:layout_constraintBottom_toBottomOf="parent"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toBottomOf="@+id/imageView"
-        custom:layout_constraintVertical_bias="0.0" />
-
 
 
 </android.support.constraint.ConstraintLayout>
