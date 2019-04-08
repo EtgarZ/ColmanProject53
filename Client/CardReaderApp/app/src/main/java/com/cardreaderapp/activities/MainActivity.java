@@ -1,5 +1,6 @@
 package com.cardreaderapp.activities;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import com.cardreaderapp.models.Card;
 import com.cardreaderapp.utils.Base64Converter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     boolean isPicked = false;
     ImageView imageView;
 
+    CropImageView cropImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,39 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnPickImage = findViewById(R.id.btnPickImage);
 
-        Button btnCamera = findViewById(R.id.btnCamera);
         imageView = findViewById(R.id.imageView);
+        cropImageView = findViewById(R.id.cropImageView);
 
         btnPickImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isPicked = true;
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-            }
-        });
-
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try{
-                    isPicked = false;
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    String imageFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/picture.jpg";
-                    File imageFile = new File(imageFilePath);
-                    picUri = Uri.fromFile(imageFile); // convert path to Uri
-                    intent.putExtra( MediaStore.EXTRA_OUTPUT, picUri);
-                    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                    StrictMode.setVmPolicy(builder.build());
-                    startActivityForResult(intent, CAMERA_CAPTURE);
-                }
-                catch(ActivityNotFoundException e){
-                    //display an error message
-                    String errorMessage = "Whoops - your device doesn't support capturing images!";
-                    Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                }
+                onSelectImageClick();
             }
         });
     }
@@ -109,52 +88,42 @@ public class MainActivity extends AppCompatActivity {
         try {
             switch (requestCode)
             {
-                case PICK_IMAGE:
-                    Uri imageUri = data.getData();
-                    imageView.setImageURI(imageUri);
-                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                    btnExtractInfo.setVisibility(View.VISIBLE);
-                    btnExtractInfo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ExtractDataAndOpenContact(galleryBitmap);
-                        }
-                    });
-                    break;
-
-                case CAMERA_CAPTURE:
-                    performCrop();
-                    break;
-
-                case PIC_CROP:
-                    //get the returned data
-                    final Bitmap thePic;
-                    Bundle extras = data.getExtras();
-                    if (extras != null) // for LG G3 intent result is in extras
-                    {
-                        //get the cropped bitmap
-                        thePic = (Bitmap) extras.get("data");
-                        //display the returned cropped image
-                        imageView.setImageBitmap(thePic);
+                // handle result of CropImageActivity
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+                        Uri imageUri = result.getUri();
+                        ((ImageView) findViewById(R.id.imageView)).setImageURI(imageUri);
+                        final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                        btnExtractInfo.setVisibility(View.VISIBLE);
+                        btnExtractInfo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ExtractDataAndOpenContact(galleryBitmap);
+                            }
+                        });
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
-                    else // for emulator extras is null and intent results is in data
-                    {
-                        imageUri = data.getData();
-                        imageView.setImageURI(imageUri);
-                        thePic = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                    }
-                    btnExtractInfo.setVisibility(View.VISIBLE);
-                    btnExtractInfo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ExtractDataAndOpenContact(thePic);
-                        }
-                    });
-                    break;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onSelectImageClick() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setActivityTitle("My Crop")
+                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setCropMenuCropButtonTitle("Done")
+                .setRequestedSize(400, 400)
+                .start(this);
+    }
+
+    private void startCropImageActivity() {
+        CropImage.activity()
+                .start(this);
     }
 
     private void performCrop(){
