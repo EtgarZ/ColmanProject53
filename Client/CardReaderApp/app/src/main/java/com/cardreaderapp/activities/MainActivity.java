@@ -166,11 +166,11 @@ public class MainActivity extends AppCompatActivity {
             //set crop properties
             cropIntent.putExtra("crop", "true");
             //indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectX", 2);
             cropIntent.putExtra("aspectY", 1);
             //indicate output X and Y
             cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("outputY", 512);
             //retrieve data on return
             cropIntent.putExtra("return-data", true);
             //start the activity - we handle returning in onActivityResult
