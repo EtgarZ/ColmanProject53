@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
     boolean isPicked = false;
     ImageView imageView;
 
-    CropImageView cropImageView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnPickImage = findViewById(R.id.btnPickImage);
 
         imageView = findViewById(R.id.imageView);
-        cropImageView = findViewById(R.id.cropImageView);
 
         btnPickImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,9 +111,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSelectImageClick() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setActivityTitle("My Crop")
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setCropMenuCropButtonTitle("Done")
                 .setRequestedSize(400, 400)
                 .start(this);
     }
