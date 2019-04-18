@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/cardsListFragment">
+
+    <fragment
+        android:id="@+id/cardsListFragment"
+        android:name="com.cardreaderapp.activities.CardsListFragment"
+        android:label="fragment_cards_list"
+        tools:layout="@layout/fragment_cards_list" >
+        <action
+            android:id="@+id/action_cardsListFragment_to_newCardFragment"
+            app:destination="@id/newCardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newCardFragment"
+        android:name="com.cardreaderapp.activities.NewCardFragment"
+        android:label="fragment_new_card"
+        tools:layout="@layout/fragment_new_card" />
+</navigation>
