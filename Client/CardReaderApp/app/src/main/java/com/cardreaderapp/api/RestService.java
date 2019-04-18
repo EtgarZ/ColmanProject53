@@ -53,9 +53,17 @@ public class RestService implements ICard {
 //                "}";
 
 //        String cardData = sendPostEncoded(imageName, base64EncodedData);
-        SendImageTask sit = new SendImageTask();
-        sit.execute(imageName, base64EncodedData);
-        String cardData = sit.get();
+        String cardData = "";
+        try
+        {
+            SendImageTask sit = new SendImageTask();
+            sit.execute(imageName, base64EncodedData);
+            cardData = sit.get();
+        }
+        catch(Exception e)
+        {
+            Log.d("Tag", e.getMessage());
+        }
 
         return gson.fromJson(cardData, Card.class); // deserializes json into card
     }
