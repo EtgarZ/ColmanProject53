@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "133961900989",
+    "firebase_url": "https://cardreaderapp-73b41.firebaseio.com",
+    "project_id": "cardreaderapp-73b41",
+    "storage_bucket": "cardreaderapp-73b41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133961900989:android:0958fb1d6630cac9",
+        "android_client_info": {
+          "package_name": "com.cardreaderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133961900989-m8kiqfstqv7sht0jat70pd1i2phq7d0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAakyQwxPINoHiK-yEryZm83E01CVD8BUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133961900989-m8kiqfstqv7sht0jat70pd1i2phq7d0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
