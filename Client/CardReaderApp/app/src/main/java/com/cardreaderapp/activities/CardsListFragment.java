@@ -44,7 +44,7 @@ public class CardsListFragment extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
+        mData.clear();
         for (int i=1;i<=6;i++){
             mData.add(new Card("card " + i, String.valueOf(i), "company " + i,
                     "address " + i, "email " + i, "website " + i));
