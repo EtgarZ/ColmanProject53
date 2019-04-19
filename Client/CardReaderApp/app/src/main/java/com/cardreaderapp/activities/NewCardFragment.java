@@ -68,7 +68,14 @@ public class NewCardFragment extends Fragment {
         return v;
     }
 
-
+    public void onSelectImageClick() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                //.start(this.getActivity());
+                .start(this.getContext(), this);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -105,14 +112,6 @@ public class NewCardFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void onSelectImageClick() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
-                .start(this.getActivity());
     }
 
     private void ExtractDataAndOpenContact(Bitmap bitmap)
