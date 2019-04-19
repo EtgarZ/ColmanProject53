@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,14 +93,14 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.fragment_register, container, false);
+        final View view = inflater.inflate(R.layout.fragment_register, container, false);
         mProgressDialog= new ProgressDialog(getActivity());
         mFireBashAuth=FirebaseAuth.getInstance();
-        mTitletxt=(TextView) inflate.findViewById(R.id.Register_Titlettxt);
-        mEmailtxt=(EditText) inflate.findViewById(R.id.Register_emailtxt);
-        mPasswordtxt=(EditText) inflate.findViewById(R.id.Register_passwordtxt);
-        mRegisterbtn=(Button) inflate.findViewById(R.id.Register_registerBtn);
-        mSwitchRegSignIntxt=inflate.findViewById(R.id.Register_switchRegisterSignIn);
+        mTitletxt=(TextView) view.findViewById(R.id.Register_Titlettxt);
+        mEmailtxt=(EditText) view.findViewById(R.id.Register_emailtxt);
+        mPasswordtxt=(EditText) view.findViewById(R.id.Register_passwordtxt);
+        mRegisterbtn=(Button) view.findViewById(R.id.Register_registerBtn);
+        mSwitchRegSignIntxt=view.findViewById(R.id.Register_switchRegisterSignIn);
         mSwitchRegSignIntxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +140,7 @@ public class RegisterFragment extends Fragment {
                                         mProgressDialog.dismiss();
                                         //register completed and logged in.
                                         Toast.makeText(getActivity(), "Registeraion Successfull!", Toast.LENGTH_LONG).show();
-
+                                        Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_cardsListFragment);
                                     } else {
                                         mProgressDialog.dismiss();
                                         Toast.makeText(getActivity(), "Registeraion Failed! pls try again later...", Toast.LENGTH_LONG).show();
@@ -159,7 +160,7 @@ public class RegisterFragment extends Fragment {
                                 mProgressDialog.dismiss();
                                 //register completed and logged in.
                                 Toast.makeText(getActivity(), "Sign In Successfull!", Toast.LENGTH_LONG).show();
-
+                                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_cardsListFragment);
                             } else {
                                 mProgressDialog.dismiss();
                                 Toast.makeText(getActivity(), "Sign in Failed! pls try again later...", Toast.LENGTH_LONG).show();
@@ -173,7 +174,7 @@ public class RegisterFragment extends Fragment {
 
             }
         });
-        return inflate;
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

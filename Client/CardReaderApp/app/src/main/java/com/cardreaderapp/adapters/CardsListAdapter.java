@@ -74,7 +74,7 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
 
         public void bind(Card card){
             mName.setText(card.GetPersonName());
-            mPhone.setText("id: " + card.GetPhoneNumber());
+            mPhone.setText("Phone: " + card.GetPhoneNumber());
         }
     }
 }
