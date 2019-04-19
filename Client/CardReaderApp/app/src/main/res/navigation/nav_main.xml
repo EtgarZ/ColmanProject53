@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/cardsListFragment">
+    app:startDestination="@id/registerFragment">
 
     <fragment
         android:id="@+id/cardsListFragment"
@@ -19,4 +19,9 @@
         android:name="com.cardreaderapp.activities.NewCardFragment"
         android:label="fragment_new_card"
         tools:layout="@layout/fragment_new_card" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.cardreaderapp.activities.RegisterFragment"
+        android:label=""
+        tools:layout="@layout/fragment_register"/>
 </navigation>
