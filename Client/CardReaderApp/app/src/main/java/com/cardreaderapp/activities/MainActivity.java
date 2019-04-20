@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 import com.cardreaderapp.R;
+import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,5 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mNavController = Navigation.findNavController(this,R.id.main_navigation);
         NavigationUI.setupActionBarWithNavController(this, mNavController);
+        FirebaseApp.initializeApp(this
+        );
     }
 }

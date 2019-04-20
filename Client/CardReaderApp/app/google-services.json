@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "133961900989-ljgpkrh6jp451nva27vl3hd90soib638.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cardreaderapp",
+            "certificate_hash": "ff6ddb77d2dd512eee4f6d9a7b209393f67e418b"
+          }
+        },
+        {
           "client_id": "133961900989-m8kiqfstqv7sht0jat70pd1i2phq7d0k.apps.googleusercontent.com",
           "client_type": 3
         }

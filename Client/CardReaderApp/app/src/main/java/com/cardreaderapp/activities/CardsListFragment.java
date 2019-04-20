@@ -38,7 +38,7 @@ public class CardsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_cards_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_cards_list, container, false);
         mRecyclerView = view.findViewById(R.id.cards_list_rv);
         mRecyclerView.setHasFixedSize(true);
 
@@ -58,14 +58,7 @@ public class CardsListFragment extends Fragment {
             @Override
             public void onClick(int index) {
                 Log.d("TAG","item click: " + index);
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                Student st = StudentsListAdapter.mData.elementAt(index);
-//                StudentDetailsFragment sdf =
-//                        StudentDetailsFragment.newInstance(Integer.toString(st.mId), st.mName, st.mPhone, st.mAddress, st.mIsPresent, index);
-//                fragmentTransaction.replace(R.id.main_container, sdf);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Navigation.findNavController(view).navigate(R.id.action_cardsListFragment_to_cardDetailsFragment);
             }
         });
 

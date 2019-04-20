@@ -13,12 +13,19 @@
         <action
             android:id="@+id/action_cardsListFragment_to_newCardFragment"
             app:destination="@id/newCardFragment" />
+        <action
+            android:id="@+id/action_cardsListFragment_to_cardDetailsFragment"
+            app:destination="@id/cardDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newCardFragment"
         android:name="com.cardreaderapp.activities.NewCardFragment"
         android:label="fragment_new_card"
-        tools:layout="@layout/fragment_new_card" />
+        tools:layout="@layout/fragment_new_card" >
+        <action
+            android:id="@+id/action_newCardFragment_to_editCardDetailsFragment"
+            app:destination="@id/editCardDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.cardreaderapp.activities.RegisterFragment"
@@ -29,5 +36,40 @@
             app:destination="@id/cardsListFragment"
             app:popUpTo="@+id/nav_main"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardDetailsFragment"
+        android:name="com.cardreaderapp.activities.CardDetailsFragment"
+        android:label="fragment_card_details"
+        tools:layout="@layout/fragment_card_details" >
+        <action
+            android:id="@+id/action_cardDetailsFragment_to_editCardDetailsFragment"
+            app:destination="@id/editCardDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editCardDetailsFragment"
+        android:name="com.cardreaderapp.activities.EditCardDetailsFragment"
+        android:label="fragment_edit_card_details"
+        tools:layout="@layout/fragment_edit_card_details" >
+        <argument
+            android:name="Name"
+            app:argType="string" />
+        <argument
+            android:name="Phone"
+            app:argType="string" />
+        <argument
+            android:name="Company"
+            app:argType="string" />
+        <argument
+            android:name="Address"
+            app:argType="string" />
+        <argument
+            android:name="Email"
+            app:argType="string" />
+        <argument
+            android:name="Website"
+            app:argType="string" />
+        <argument android:name="ImageUri"
+            app:argType="android.net.Uri" />
     </fragment>
 </navigation>

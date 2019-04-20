@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/edit_card_details_email_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:text="MyEmail"
+                app:layout_constraintStart_toEndOf="@+id/edit_card_details_email_label"
+                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_address_et" />
+
+            <EditText
+                android:id="@+id/edit_card_details_company_et"
+                android:layout_width="123dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:text="MyCompany"
+                app:layout_constraintStart_toEndOf="@+id/edit_card_details_company_label"
+                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_phone_et" />
+
+            <TextView
+                android:id="@+id/edit_card_details_phone_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="Phone"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_phone_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_card_details_phone_et" />
+
+            <EditText
+                android:id="@+id/edit_card_details_phone_et"
+                android:layout_width="156dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:text="MyPhone"
+                app:layout_constraintStart_toEndOf="@+id/edit_card_details_phone_label"
+                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_name_et" />
+
+            <ImageView
+                android:id="@+id/edit_card_details_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/avatar" />
+
+            <TextView
+                android:id="@+id/edit_card_details_website_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="Website"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_website_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_card_details_website_et" />
+
+            <EditText
+                android:id="@+id/edit_card_details_address_et"
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:text="MyAddress"
+                app:layout_constraintStart_toEndOf="@+id/edit_card_details_address_label"
+                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_company_et" />
+
+            <EditText
+                android:id="@+id/edit_card_details_name_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:text="MyName"
+                app:layout_constraintStart_toEndOf="@+id/edit_card_details_name_label"
+                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_imageView" />
+
+            <TextView
+                android:id="@+id/edit_card_details_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="Name"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_name_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_card_details_name_et" />
+
+            <EditText
+                android:id="@+id/edit_card_details_website_et"
+                android:layout_width="129dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:text="MyWebsite"
+                app:layout_constraintStart_toEndOf="@+id/edit_card_details_website_label"
+                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_email_et" />
+
+            <TextView
+                android:id="@+id/edit_card_details_email_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="Email"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_email_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_card_details_email_et" />
+
+            <TextView
+                android:id="@+id/edit_card_details_company_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="Company"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_company_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_card_details_company_et" />
+
+            <TextView
+                android:id="@+id/edit_card_details_address_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="Address"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_address_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_card_details_address_et" />
+
+            <Button
+                android:id="@+id/edit_card_details_save_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Save"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_website_et" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
