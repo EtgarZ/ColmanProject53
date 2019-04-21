@@ -151,7 +151,8 @@ public class NewCardFragment extends Fragment {
                                 card.GetAddress(),
                                 card.GetEmail(),
                                 card.GetWebsite(),
-                                imageUri
+                                imageUri,
+                        true
                         );
         Navigation.findNavController(this.getView())
                 .navigate(action);

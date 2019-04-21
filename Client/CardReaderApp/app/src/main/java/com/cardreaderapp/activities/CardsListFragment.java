@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.adapters.CardsListAdapter;
@@ -56,7 +57,7 @@ public class CardsListFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mData.clear();
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    Upload c=new Upload ();
+                    Upload c = new Upload();
                     c.mAddress=(ds.child("mAddress").getValue().toString());
                     c.mCompany=(ds.child("mCompany").getValue().toString());
                     c.mEmail=(ds.child("mEmail").getValue().toString());
@@ -65,16 +66,13 @@ public class CardsListFragment extends Fragment {
                     c.mWebsite=(ds.child("mWebsite").getValue().toString());
                     c.mImageUri=ds.child("mImageUri").getValue().toString();
                     mData.add(c);
-
-
                 }
                 mAdapter.notifyDataSetChanged();
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getActivity(),"Fetching card data failed: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

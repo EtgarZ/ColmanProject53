@@ -92,5 +92,13 @@
             app:argType="string" />
         <argument android:name="ImageUri"
             app:argType="android.net.Uri" />
+        <argument
+            android:name="IsNewCard"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_editCardDetailsFragment_to_cardsListFragment"
+            app:destination="@id/cardsListFragment"
+            app:popUpTo="@+id/cardsListFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

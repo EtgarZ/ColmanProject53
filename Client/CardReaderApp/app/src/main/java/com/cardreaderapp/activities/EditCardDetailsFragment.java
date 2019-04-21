@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +23,18 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +50,7 @@ public class EditCardDetailsFragment extends Fragment {
     private EditText mWebsite;
     private Button mSaveBtn;
 
+    private boolean mIsNewCard;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private String mUserId;
@@ -69,6 +77,7 @@ public class EditCardDetailsFragment extends Fragment {
         String email =  EditCardDetailsFragmentArgs.fromBundle(getArguments()).getEmail();
         String website =  EditCardDetailsFragmentArgs.fromBundle(getArguments()).getWebsite();
         mImageUri = EditCardDetailsFragmentArgs.fromBundle(getArguments()).getImageUri();
+        mIsNewCard = EditCardDetailsFragmentArgs.fromBundle(getArguments()).getIsNewCard();
 
         mImageView = view.findViewById(R.id.edit_card_details_imageView);
         mName = view.findViewById(R.id.edit_card_details_name_et);
@@ -86,14 +95,23 @@ public class EditCardDetailsFragment extends Fragment {
         mAddress.setText(address);
         mEmail.setText(email);
         mWebsite.setText(website);
-        Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
+        //Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
+        Picasso.with(this.getContext()).load(mImageUri).fit().into(mImageView);
 
-        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+        if (mIsNewCard)
+            mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UploadFile();
             }
         });
+        else
+            mSaveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SaveCard(mImageUri);
+                }
+            });
 
         return view;
     }
@@ -102,13 +120,62 @@ public class EditCardDetailsFragment extends Fragment {
         return MimeTypeMap.getFileExtensionFromUrl(uri.toString());
     }
 
-    private void UploadFile(){
+    private void SaveCard(Uri downloadUri){
         final String name =  mName.getText().toString();
         final String phone =  mPhone.getText().toString();
         final String company =  mCompany.getText().toString();
         final String address =  mAddress.getText().toString();
         final String email =  mEmail.getText().toString();
         final String website =  mWebsite.getText().toString();
+
+        if (mIsNewCard){
+            Upload upload = new Upload(name, phone, company, address, email, website, downloadUri.toString());
+            String uploadId = mDatabaseRef.push().getKey();
+            mDatabaseRef.child(uploadId).setValue(upload);
+            Navigation.findNavController(getView()).navigate(R.id.action_editCardDetailsFragment_to_cardsListFragment);
+        }
+        else{
+            // Edit record
+            final Upload upload = new Upload();
+            upload.mAddress = address;
+            upload.mCompany = company;
+            upload.mEmail = email;
+            upload.mName = name;
+            upload.mPhone = phone;
+            upload.mWebsite = website;
+            upload.mImageUri = mImageUri.toString();
+
+            mDatabaseRef.addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            //Get map of cards in datasnapshot
+                            Map<String,Object> cards = (Map<String,Object>) dataSnapshot.getValue();
+                            for (Map.Entry<String, Object> entry : cards.entrySet()){
+
+                                //Get card map
+                                Map card = (Map) entry.getValue();
+                                if (card.get("mImageUri").toString() == mImageUri.toString()){
+                                    String cardId = entry.getKey();
+                                    mDatabaseRef.child(cardId).setValue(upload);
+                                    Toast.makeText(getActivity(), "Card updated successfully!", Toast.LENGTH_SHORT).show();
+
+                                    Navigation.findNavController(getView()).navigate(R.id.action_editCardDetailsFragment_to_cardsListFragment);
+                                    return;
+                                }
+                            }
+                            Toast.makeText(getActivity(), "Couldn't update card..", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            //handle databaseError
+                        }
+                    });
+        }
+    }
+
+    private void UploadFile(){
 
         final StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
         UploadTask uploadTask = fileRef.putFile(mImageUri);
@@ -126,9 +193,7 @@ public class EditCardDetailsFragment extends Fragment {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     Toast.makeText(EditCardDetailsFragment.this.getActivity(), "Upload successfully!", Toast.LENGTH_SHORT).show();
-                    Upload upload = new Upload(name, phone, company, address, email, website, downloadUri.toString());
-                    String uploadId = mDatabaseRef.push().getKey();
-                    mDatabaseRef.child(uploadId).setValue(upload);
+                    SaveCard(downloadUri);
                 } else {
                     Toast.makeText(EditCardDetailsFragment.this.getActivity(), "Something got wrong.. pls try again", Toast.LENGTH_LONG).show();
                 }

@@ -75,7 +75,8 @@ public class CardDetailsFragment extends Fragment {
                                 address,
                                 email,
                                 website,
-                                mImageUri
+                                mImageUri,
+                                false
                         );
                 Navigation.findNavController(v).navigate(action);
             }
