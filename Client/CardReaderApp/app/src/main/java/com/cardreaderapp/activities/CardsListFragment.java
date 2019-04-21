@@ -1,6 +1,8 @@
 package com.cardreaderapp.activities;
 
 import android.os.Bundle;
+
+import com.cardreaderapp.models.Upload;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,7 +18,16 @@ import android.view.ViewGroup;
 import com.cardreaderapp.R;
 import com.cardreaderapp.adapters.CardsListAdapter;
 import com.cardreaderapp.models.Card;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Vector;
 
 public class CardsListFragment extends Fragment {
@@ -26,13 +37,44 @@ public class CardsListFragment extends Fragment {
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
 
-
+    DatabaseReference  mDatabaseRef;
+     FirebaseUser mUserDetails;
     private FloatingActionButton mAddCardBtn;
 
     public CardsListFragment() {
         // Required empty public constructor
     }
+    public  void ShowData()
+    {
+        mUserDetails=FirebaseAuth.getInstance().getCurrentUser();
+        String userUid = mUserDetails.getUid();
+        FirebaseDatabase.getInstance().getReference("Users/" + userUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mData.clear();
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    Card c=new Card();
+                    c.setAddress(ds.child("mAddress").getValue().toString());
+                    c.setCompany(ds.child("mCompany").getValue().toString());
+                    c.setEmail(ds.child("mEmail").getValue().toString());
+                    c.setPersonName(ds.child("mName").getValue().toString());
+                    c.setPhoneNumber(ds.child("mPhone").getValue().toString());
+                    c.setWebsite(ds.child("mWebsite").getValue().toString());
+                    mData.add(c);
 
+                    String ImageUri = ds.child("mImageUri").getValue().toString();
+                    ImageUri=ImageUri.trim();
+                }
+                mAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,11 +86,7 @@ public class CardsListFragment extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mData.clear();
-        for (int i=1;i<=6;i++){
-            mData.add(new Card("card " + i, String.valueOf(i), "company " + i,
-                    "address " + i, "email " + i, "website " + i));
-        }
+
 
         mAdapter = new CardsListAdapter(mData);
         mRecyclerView.setAdapter(mAdapter);
@@ -64,6 +102,7 @@ public class CardsListFragment extends Fragment {
 
         mAddCardBtn = view.findViewById(R.id.cards_list_add_bt);
         mAddCardBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_newCardFragment));
+        ShowData();
 
         return view;
     }

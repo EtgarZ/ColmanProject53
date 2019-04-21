@@ -15,6 +15,33 @@ public class Card {
     public String GetEmail(){return this.email;}
     public String GetWebsite(){return this.website;}
 
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public Card(){
+
+    }
     public Card(String personName, String phoneNumber, String company, String address, String email, String website){
         this.personName = personName;
         this.phoneNumber = phoneNumber;

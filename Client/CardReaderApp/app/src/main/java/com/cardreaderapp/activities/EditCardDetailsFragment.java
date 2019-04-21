@@ -21,8 +21,11 @@ import android.widget.Toast;
 import com.cardreaderapp.R;
 import com.cardreaderapp.models.Card;
 import com.cardreaderapp.models.Upload;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,6 +33,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.net.URI;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -111,9 +116,33 @@ public class EditCardDetailsFragment extends Fragment {
         final String email =  mEmail.getText().toString();
         final String website =  mWebsite.getText().toString();
 
-        StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
+        final StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
+        UploadTask uploadTask = fileRef.putFile(mImageUri);
+        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return fileRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    Toast.makeText(EditCardDetailsFragment.this.getActivity(), "Upload successfully!", Toast.LENGTH_SHORT).show();
+                    Upload upload = new Upload(name, phone, company, address, email, website, downloadUri.toString());
+                    String uploadId = mDatabaseRef.push().getKey();
+                    mDatabaseRef.child(uploadId).setValue(upload);
+                } else {
+                    Toast.makeText(EditCardDetailsFragment.this.getActivity(), "Something got wrong.. pls try again", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
-        fileRef.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+        /*.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Handler handler = new Handler();
@@ -124,7 +153,6 @@ public class EditCardDetailsFragment extends Fragment {
                     }
                 }, 500);
                 Toast.makeText(EditCardDetailsFragment.this.getActivity(), "Upload successfully!", Toast.LENGTH_SHORT).show();
-
                 Upload upload = new Upload(name, phone, company, address, email, website, taskSnapshot.getUploadSessionUri().toString());
                 String uploadId = mDatabaseRef.push().getKey();
                 mDatabaseRef.child(uploadId).setValue(upload);
@@ -140,7 +168,7 @@ public class EditCardDetailsFragment extends Fragment {
                 double progress = 100.0 * taskSnapshot.getBytesTransferred()/ taskSnapshot.getTotalByteCount();
                 // set progressbar with progress
             }
-        });
+        });*/
     }
 
 }

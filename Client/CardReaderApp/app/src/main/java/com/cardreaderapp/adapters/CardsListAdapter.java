@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.models.Card;
+import com.cardreaderapp.models.Upload;
+import com.squareup.picasso.Picasso;
 
 import java.util.Vector;
 
@@ -59,6 +61,9 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
             mAvatar = itemView.findViewById(R.id.strow_avatar_img);
             mName = itemView.findViewById(R.id.card_row_name_tv);
             mPhone = itemView.findViewById(R.id.card_row_phone_tv);
+            Picasso.with(itemView.getContext()).load
+                    ("https://firebasestorage.googleapis.com/v0/b/cardreaderapp-73b41.appspot.com/o/Uploads%2FjFIJcISwcoVy6X5PAZmw7eCsPRl2%2F1555850667845.jpg?alt=media&token=4fc1169b-6e92-4bad-8c83-01bbb34de849").
+                    fit().centerCrop().into(mAvatar);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
