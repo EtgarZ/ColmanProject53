@@ -45,6 +45,27 @@
         <action
             android:id="@+id/action_cardDetailsFragment_to_editCardDetailsFragment"
             app:destination="@id/editCardDetailsFragment" />
+        <argument
+            android:name="Name"
+            app:argType="string" />
+        <argument
+            android:name="Phone"
+            app:argType="string" />
+        <argument
+            android:name="Company"
+            app:argType="string" />
+        <argument
+            android:name="Address"
+            app:argType="string" />
+        <argument
+            android:name="Email"
+            app:argType="string" />
+        <argument
+            android:name="Website"
+            app:argType="string" />
+        <argument
+            android:name="ImageUri"
+            app:argType="android.net.Uri" />
     </fragment>
     <fragment
         android:id="@+id/editCardDetailsFragment"

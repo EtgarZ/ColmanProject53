@@ -1,5 +1,6 @@
 package com.cardreaderapp.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.cardreaderapp.models.Upload;
@@ -98,7 +99,19 @@ public class CardsListFragment extends Fragment {
             @Override
             public void onClick(int index) {
                 Log.d("TAG","item click: " + index);
-                Navigation.findNavController(view).navigate(R.id.action_cardsListFragment_to_cardDetailsFragment);
+                //Navigation.findNavController(view).navigate(R.id.action_cardsListFragment_to_cardDetailsFragment);
+                Upload card = mData.elementAt(index);
+                CardsListFragmentDirections.ActionCardsListFragmentToCardDetailsFragment action =
+                        CardsListFragmentDirections.actionCardsListFragmentToCardDetailsFragment(
+                                card.mName,
+                                card.mPhone,
+                                card.mCompany,
+                                card.mAddress,
+                                card.mEmail,
+                                card.mWebsite,
+                                Uri.parse(card.mImageUri)
+                        );
+                Navigation.findNavController(view).navigate(action);
             }
         });
 
