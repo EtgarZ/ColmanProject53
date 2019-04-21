@@ -17,10 +17,10 @@ import com.squareup.picasso.Picasso;
 import java.util.Vector;
 
 public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.CardRowViewHolder> {
-    public static Vector<Card> mData;
+    public static Vector<Upload> mData;
     OnItemClickListener mListener;
 
-    public CardsListAdapter(Vector<Card> data) {
+    public CardsListAdapter(Vector<Upload> data) {
         mData = data;
     }
     public interface OnItemClickListener{
@@ -41,7 +41,7 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
 
     @Override
     public void onBindViewHolder(@NonNull CardRowViewHolder cardRowViewHolder, int i) {
-        Card card = mData.elementAt(i);
+        Upload card = mData.elementAt(i);
         cardRowViewHolder.bind(card);
     }
 
@@ -54,16 +54,15 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
         ImageView mAvatar;
         TextView mName;
         TextView mPhone;
-
+        View mView;
         public CardRowViewHolder(@NonNull final View itemView,
                                     final OnItemClickListener listener) {
             super(itemView);
             mAvatar = itemView.findViewById(R.id.strow_avatar_img);
             mName = itemView.findViewById(R.id.card_row_name_tv);
             mPhone = itemView.findViewById(R.id.card_row_phone_tv);
-            Picasso.with(itemView.getContext()).load
-                    ("https://firebasestorage.googleapis.com/v0/b/cardreaderapp-73b41.appspot.com/o/Uploads%2FjFIJcISwcoVy6X5PAZmw7eCsPRl2%2F1555850667845.jpg?alt=media&token=4fc1169b-6e92-4bad-8c83-01bbb34de849").
-                    fit().centerCrop().into(mAvatar);
+            mView=itemView;
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,9 +76,11 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
             });
         }
 
-        public void bind(Card card){
-            mName.setText(card.GetPersonName());
-            mPhone.setText("Phone: " + card.GetPhoneNumber());
+        public void bind(Upload card){
+            mName.setText(card.mName);
+            mPhone.setText("Phone: " + card.mPhone);
+            Picasso.with(itemView.getContext()).load(card.mImageUri)
+                    .fit().centerCrop().into(mAvatar);
         }
     }
 }

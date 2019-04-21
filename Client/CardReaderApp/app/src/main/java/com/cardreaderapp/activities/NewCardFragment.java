@@ -106,7 +106,9 @@ public class NewCardFragment extends Fragment {
                     mExtractInfoBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Card card = extractCardData(galleryBitmap);
+                           // Card card = extractCardData(galleryBitmap);
+                            Card card = new Card("Etgar", "123", "Facebook",
+                                    "Rishon", "etgarzyl92@gmail.com","www.etgar.com");
                             if (card == null){
                                 Toast.makeText(getActivity(), "Couldn't retrieve data!", Toast.LENGTH_LONG).show();
                                 return;

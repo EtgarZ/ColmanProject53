@@ -32,7 +32,7 @@ import java.util.Vector;
 
 public class CardsListFragment extends Fragment {
     CardsListAdapter mAdapter;
-    Vector<Card> mData = new Vector<Card>();
+    Vector<Upload> mData = new Vector<Upload>();
 
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
@@ -43,6 +43,8 @@ public class CardsListFragment extends Fragment {
 
     public CardsListFragment() {
         // Required empty public constructor
+
+
     }
     public  void ShowData()
     {
@@ -53,17 +55,17 @@ public class CardsListFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mData.clear();
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    Card c=new Card();
-                    c.setAddress(ds.child("mAddress").getValue().toString());
-                    c.setCompany(ds.child("mCompany").getValue().toString());
-                    c.setEmail(ds.child("mEmail").getValue().toString());
-                    c.setPersonName(ds.child("mName").getValue().toString());
-                    c.setPhoneNumber(ds.child("mPhone").getValue().toString());
-                    c.setWebsite(ds.child("mWebsite").getValue().toString());
+                    Upload c=new Upload ();
+                    c.mAddress=(ds.child("mAddress").getValue().toString());
+                    c.mCompany=(ds.child("mCompany").getValue().toString());
+                    c.mEmail=(ds.child("mEmail").getValue().toString());
+                    c.mName=(ds.child("mName").getValue().toString());
+                    c.mPhone=(ds.child("mPhone").getValue().toString());
+                    c.mWebsite=(ds.child("mWebsite").getValue().toString());
+                    c.mImageUri=ds.child("mImageUri").getValue().toString();
                     mData.add(c);
 
-                    String ImageUri = ds.child("mImageUri").getValue().toString();
-                    ImageUri=ImageUri.trim();
+
                 }
                 mAdapter.notifyDataSetChanged();
 
