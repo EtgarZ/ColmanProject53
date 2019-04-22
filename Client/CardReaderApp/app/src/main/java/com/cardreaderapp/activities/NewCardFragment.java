@@ -158,36 +158,6 @@ public class NewCardFragment extends Fragment {
                 .navigate(action);
     }
 
-    private void openContact(Card card)
-    {
-        // Create intent contact-add
-        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
-        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-        // Send card data to contact intent
-        intent.putExtra(ContactsContract.Intents.Insert.NAME, card.GetPersonName())
-                .putExtra(ContactsContract.Intents.Insert.PHONE, card.GetPhoneNumber())
-                .putExtra(ContactsContract.Intents.Insert.PHONE_TYPE,
-                        ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
-                .putExtra(ContactsContract.Intents.Insert.EMAIL, card.GetEmail())
-                .putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE,
-                        ContactsContract.CommonDataKinds.Email.TYPE_WORK)
-                .putExtra(ContactsContract.Intents.Insert.COMPANY, card.GetCompany())
-                .putExtra(ContactsContract.Intents.Insert.POSTAL, card.GetAddress())
-                .putExtra(ContactsContract.Intents.Insert.POSTAL_TYPE,
-                        ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK);
-
-        ArrayList<ContentValues> data = new ArrayList<ContentValues>();
-
-        ContentValues row1 = new ContentValues();
-        row1.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE);
-        row1.put(ContactsContract.CommonDataKinds.Website.DATA1, card.GetWebsite());
-        data.add(row1);
-
-        intent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data);
-
-        // Open contact member and fill details from card
-        startActivity(intent);
-    }
 
 }
