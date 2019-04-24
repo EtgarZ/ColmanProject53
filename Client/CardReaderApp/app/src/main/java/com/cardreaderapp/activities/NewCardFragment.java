@@ -4,6 +4,7 @@ package com.cardreaderapp.activities;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -29,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -87,9 +89,17 @@ public class NewCardFragment extends Fragment {
     }
 
     public void onSelectImageClick() {
+        // From docs :
+        // If image is blurred/low quality, You are probably using the thumbnail image.
+        // You need to set the EXTRA_OUTPUT to a path and camera will save the full image to this path.
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri outputFileUri = Uri.fromFile(new File(this.getContext().getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(1024, 1024, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
                 //.setRequestedSize(400, 400)
                 //.start(this.getActivity());
                 .start(this.getContext(), this);
