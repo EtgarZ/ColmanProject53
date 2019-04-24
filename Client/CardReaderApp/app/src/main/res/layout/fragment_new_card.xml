@@ -22,6 +22,17 @@
         app:layout_constraintTop_toBottomOf="@+id/btnExtractInfo"/>
 
     <Button
+        android:id="@+id/btnPickGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_orange_dark"
+        android:text="Pick from gallery"
+        android:textColor="@android:color/holo_blue_dark"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/btnAddCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +41,9 @@
         android:text="Add New Card"
         android:textColor="@android:color/holo_blue_dark"
         android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnPickGallery"/>
+
+
 
     <Button
         android:id="@+id/btnExtractInfo"

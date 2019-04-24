@@ -45,6 +45,9 @@ public class NewCardFragment extends Fragment {
 
     private ImageView mIimageView;
     private Button mExtractInfoBtn;
+    private Button mPickBtn;
+
+    private final int PICK_IMAGE = 10;
 
     public NewCardFragment() {
         // Required empty public constructor
@@ -61,11 +64,22 @@ public class NewCardFragment extends Fragment {
         Button btnAddCard = v.findViewById(R.id.btnAddCard);
         mIimageView = v.findViewById(R.id.imageView);
         mExtractInfoBtn = v.findViewById(R.id.btnExtractInfo);
+        mPickBtn = v.findViewById(R.id.btnPickGallery);
 
         btnAddCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSelectImageClick();
+            }
+        });
+
+        mPickBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
 
@@ -76,7 +90,7 @@ public class NewCardFragment extends Fragment {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
+                //.setRequestedSize(400, 400)
                 //.start(this.getActivity());
                 .start(this.getContext(), this);
     }
@@ -107,8 +121,6 @@ public class NewCardFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             Card card = extractCardData(galleryBitmap);
-//                            Card card = new Card("Etgar", "123", "Facebook",
-//                                    "Rishon", "etgarzyl92@gmail.com","www.etgar.com");
                             if (card == null){
                                 Toast.makeText(getActivity(), "Couldn't retrieve data!", Toast.LENGTH_LONG).show();
                                 return;
@@ -119,6 +131,28 @@ public class NewCardFragment extends Fragment {
                     });
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Toast.makeText(this.getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                }
+            }
+            else if (requestCode == PICK_IMAGE)
+            {
+                try {
+                    mExtractInfoBtn.setVisibility(View.VISIBLE);
+                    final Uri imageUri = data.getData();
+                    mIimageView.setImageURI(imageUri);
+                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);
+                    mExtractInfoBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Card card = extractCardData(galleryBitmap);
+                            if (card == null){
+                                Toast.makeText(getActivity(), "Couldn't retrieve data!", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            navigateEditCardDetails(card, imageUri);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         } catch (IOException e) {
