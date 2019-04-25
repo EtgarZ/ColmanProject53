@@ -56,9 +56,10 @@ public class RestService implements ICard {
         String cardData = "";
         try
         {
-            SendImageTask sit = new SendImageTask();
-            sit.execute(imageName, base64EncodedData);
-            cardData = sit.get();
+//            SendImageTask sit = new SendImageTask();
+//            sit.execute(imageName, base64EncodedData);
+//            cardData = sit.get();
+            cardData = sendPostEncoded(imageName, base64EncodedData);
         }
         catch(Exception e)
         {

@@ -1,11 +1,15 @@
 package com.cardreaderapp.activities;
 
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -48,6 +52,8 @@ public class NewCardFragment extends Fragment {
     private ImageView mIimageView;
     private Button mExtractInfoBtn;
     private Button mPickBtn;
+
+    private Uri mImageUri;
 
     private final int PICK_IMAGE = 10;
 
@@ -123,20 +129,15 @@ public class NewCardFragment extends Fragment {
             {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
-                    final Uri imageUri = result.getUri();
-                    mIimageView.setImageURI(imageUri);
-                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);
+                    mImageUri = result.getUri();
+                    mIimageView.setImageURI(mImageUri);
+                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), mImageUri);
                     mExtractInfoBtn.setVisibility(View.VISIBLE);
                     mExtractInfoBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Card card = extractCardData(galleryBitmap);
-                            if (card == null){
-                                Toast.makeText(getActivity(), "Couldn't retrieve data!", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            navigateEditCardDetails(card, imageUri);
-                            //openContact(card);
+                            BackgroundTask myTask = new BackgroundTask();
+                            myTask.execute(galleryBitmap);
                         }
                     });
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -147,18 +148,14 @@ public class NewCardFragment extends Fragment {
             {
                 try {
                     mExtractInfoBtn.setVisibility(View.VISIBLE);
-                    final Uri imageUri = data.getData();
-                    mIimageView.setImageURI(imageUri);
-                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);
+                    mImageUri = data.getData();
+                    mIimageView.setImageURI(mImageUri);
+                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), mImageUri);
                     mExtractInfoBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Card card = extractCardData(galleryBitmap);
-                            if (card == null){
-                                Toast.makeText(getActivity(), "Couldn't retrieve data!", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            navigateEditCardDetails(card, imageUri);
+                            BackgroundTask myTask = new BackgroundTask();
+                            myTask.execute(galleryBitmap);
                         }
                     });
                 } catch (IOException e) {
@@ -202,6 +199,37 @@ public class NewCardFragment extends Fragment {
                 .navigate(action);
     }
 
+    private class BackgroundTask extends AsyncTask <Bitmap,String, Card> {
+        private ProgressDialog dialog;
 
+        public BackgroundTask() {
+        }
+
+        @Override
+        protected Card doInBackground(Bitmap... bitmap) {
+            return extractCardData(bitmap[0]);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = ProgressDialog.show(getActivity(), "Extracting Data...", "Please wait for results...", true);
+        }
+
+        @Override
+        protected void onPostExecute(Card card) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
+            if (card == null){
+                Toast.makeText(getActivity(), "Couldn't retrieve data!", Toast.LENGTH_LONG).show();
+                return;
+            }
+            navigateEditCardDetails(card, mImageUri);
+            //openContact(card);
+        }
+
+
+    }
 
 }
