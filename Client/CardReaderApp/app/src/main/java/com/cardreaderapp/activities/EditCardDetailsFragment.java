@@ -1,7 +1,9 @@
 package com.cardreaderapp.activities;
 
 
+import android.app.ProgressDialog;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -55,6 +57,7 @@ public class EditCardDetailsFragment extends Fragment {
     private DatabaseReference mDatabaseRef;
     private String mUserId;
     private Uri mImageUri;
+    private ProgressDialog mDialog;
     public EditCardDetailsFragment() {
         // Required empty public constructor
     }
@@ -98,20 +101,12 @@ public class EditCardDetailsFragment extends Fragment {
         //Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
         Picasso.with(this.getContext()).load(mImageUri).fit().into(mImageView);
 
-        if (mIsNewCard)
-            mSaveBtn.setOnClickListener(new View.OnClickListener() {
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UploadFile();
+                new BackgroundTask().execute();
             }
         });
-        else
-            mSaveBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SaveCard(mImageUri);
-                }
-            });
 
         return view;
     }
@@ -132,6 +127,9 @@ public class EditCardDetailsFragment extends Fragment {
             Upload upload = new Upload(name, phone, company, address, email, website, downloadUri.toString());
             String uploadId = mDatabaseRef.push().getKey();
             mDatabaseRef.child(uploadId).setValue(upload);
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
             Navigation.findNavController(getView()).navigate(R.id.action_editCardDetailsFragment_to_cardsListFragment);
         }
         else{
@@ -160,6 +158,9 @@ public class EditCardDetailsFragment extends Fragment {
                                     mDatabaseRef.child(cardId).setValue(upload);
                                     Toast.makeText(getActivity(), "Card updated successfully!", Toast.LENGTH_SHORT).show();
 
+                                    if (mDialog.isShowing()) {
+                                        mDialog.dismiss();
+                                    }
                                     Navigation.findNavController(getView()).navigate(R.id.action_editCardDetailsFragment_to_cardsListFragment);
                                     return;
                                 }
@@ -199,35 +200,24 @@ public class EditCardDetailsFragment extends Fragment {
                 }
             }
         });
-
-
-        /*.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //set progress bar to 0
-                    }
-                }, 500);
-                Toast.makeText(EditCardDetailsFragment.this.getActivity(), "Upload successfully!", Toast.LENGTH_SHORT).show();
-                Upload upload = new Upload(name, phone, company, address, email, website, taskSnapshot.getUploadSessionUri().toString());
-                String uploadId = mDatabaseRef.push().getKey();
-                mDatabaseRef.child(uploadId).setValue(upload);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditCardDetailsFragment.this.getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = 100.0 * taskSnapshot.getBytesTransferred()/ taskSnapshot.getTotalByteCount();
-                // set progressbar with progress
-            }
-        });*/
     }
 
+    private class BackgroundTask extends AsyncTask<Void, Void, Void> {
+        public BackgroundTask() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (mIsNewCard)
+                UploadFile();
+            else
+                SaveCard(mImageUri);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mDialog = ProgressDialog.show(getActivity(), "", "Saving Data...", true);
+        }
+    }
 }
