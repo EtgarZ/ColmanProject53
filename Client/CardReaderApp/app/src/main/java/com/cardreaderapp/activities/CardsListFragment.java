@@ -1,13 +1,15 @@
 package com.cardreaderapp.activities;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.cardreaderapp.models.Upload;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,11 +17,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.adapters.CardsListAdapter;
-import com.cardreaderapp.models.Card;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,8 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Vector;
 
 public class CardsListFragment extends Fragment {
@@ -43,31 +43,47 @@ public class CardsListFragment extends Fragment {
      FirebaseUser mUserDetails;
     private FloatingActionButton mAddCardBtn;
 
+    private ProgressBar mProgressBar;
+
     public CardsListFragment() {
         // Required empty public constructor
 
 
     }
-    public  void ShowData()
+
+    private void prepareUIForLoading(){
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mAddCardBtn.hide();
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void prepareUIAfterLoading(){
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mAddCardBtn.show();
+        mProgressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void ShowData()
     {
-        mUserDetails=FirebaseAuth.getInstance().getCurrentUser();
+
         String userUid = mUserDetails.getUid();
         FirebaseDatabase.getInstance().getReference("Users/" + userUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mData.clear();
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Upload c = new Upload();
-                    c.mAddress=(ds.child("mAddress").getValue().toString());
-                    c.mCompany=(ds.child("mCompany").getValue().toString());
-                    c.mEmail=(ds.child("mEmail").getValue().toString());
-                    c.mName=(ds.child("mName").getValue().toString());
-                    c.mPhone=(ds.child("mPhone").getValue().toString());
-                    c.mWebsite=(ds.child("mWebsite").getValue().toString());
-                    c.mImageUri=ds.child("mImageUri").getValue().toString();
+                    c.mAddress = (ds.child("mAddress").getValue().toString());
+                    c.mCompany = (ds.child("mCompany").getValue().toString());
+                    c.mEmail = (ds.child("mEmail").getValue().toString());
+                    c.mName = (ds.child("mName").getValue().toString());
+                    c.mPhone = (ds.child("mPhone").getValue().toString());
+                    c.mWebsite = (ds.child("mWebsite").getValue().toString());
+                    c.mImageUri = ds.child("mImageUri").getValue().toString();
                     mData.add(c);
                 }
                 mAdapter.notifyDataSetChanged();
+                prepareUIAfterLoading();
             }
 
             @Override
@@ -88,9 +104,10 @@ public class CardsListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
         mAdapter = new CardsListAdapter(mData);
         mRecyclerView.setAdapter(mAdapter);
+
+        mUserDetails=FirebaseAuth.getInstance().getCurrentUser();
 
         // TODO: Navigate to cardDetails fragment
         mAdapter.setOnItemClickListener(new CardsListAdapter.OnItemClickListener() {
@@ -115,8 +132,10 @@ public class CardsListFragment extends Fragment {
 
         mAddCardBtn = view.findViewById(R.id.cards_list_add_bt);
         mAddCardBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_newCardFragment));
-        ShowData();
 
+
+        mProgressBar = view.findViewById(R.id.cards_list_pb);
+        mProgressBar.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -124,5 +143,30 @@ public class CardsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mAdapter.notifyDataSetChanged();
+        BackgroundTask task = new BackgroundTask();
+        task.execute();
+    }
+
+    private class BackgroundTask extends AsyncTask<Void, Void, Void> {
+
+        public BackgroundTask() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ShowData();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            prepareUIForLoading();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+        }
     }
 }
