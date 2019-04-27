@@ -78,7 +78,7 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
 
         public void bind(Upload card){
             mName.setText(card.mName);
-            mPhone.setText("Phone: " + card.mPhone);
+            mPhone.setText(card.mPhone);
             Picasso.with(itemView.getContext()).load(card.mImageUri)
                     .fit().centerCrop().into(mAvatar);
         }
