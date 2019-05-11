@@ -4,11 +4,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.cardreaderapp.models.Upload;
+import com.cardreaderapp.models.Card;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +32,7 @@ import java.util.Vector;
 
 public class CardsListFragment extends Fragment {
     CardsListAdapter mAdapter;
-    Vector<Upload> mData = new Vector<Upload>();
+    Vector<Card> mData = new Vector<Card>();
 
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
@@ -42,6 +40,7 @@ public class CardsListFragment extends Fragment {
     DatabaseReference  mDatabaseRef;
      FirebaseUser mUserDetails;
     private FloatingActionButton mAddCardBtn;
+    private FloatingActionButton mShareCardsBtn;
 
     private ProgressBar mProgressBar;
 
@@ -54,32 +53,33 @@ public class CardsListFragment extends Fragment {
     private void prepareUIForLoading(){
         mRecyclerView.setVisibility(View.INVISIBLE);
         mAddCardBtn.hide();
+        mShareCardsBtn.hide();
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void prepareUIAfterLoading(){
         mRecyclerView.setVisibility(View.VISIBLE);
         mAddCardBtn.show();
+        mShareCardsBtn.show();
         mProgressBar.setVisibility(View.INVISIBLE);
     }
 
     private void ShowData()
     {
-
         String userUid = mUserDetails.getUid();
-        FirebaseDatabase.getInstance().getReference("Users/" + userUid).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Users/" + userUid + "/Cards").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mData.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Upload c = new Upload();
-                    c.mAddress = (ds.child("mAddress").getValue().toString());
-                    c.mCompany = (ds.child("mCompany").getValue().toString());
-                    c.mEmail = (ds.child("mEmail").getValue().toString());
-                    c.mName = (ds.child("mName").getValue().toString());
-                    c.mPhone = (ds.child("mPhone").getValue().toString());
-                    c.mWebsite = (ds.child("mWebsite").getValue().toString());
-                    c.mImageUri = ds.child("mImageUri").getValue().toString();
+                    Card c = new Card();
+                    c.setPersonName(ds.child("personName").getValue().toString());
+                    c.setPhoneNumber(ds.child("phoneNumber").getValue().toString());
+                    c.setCompany(ds.child("company").getValue().toString());
+                    c.setAddress(ds.child("address").getValue().toString());
+                    c.setEmail(ds.child("email").getValue().toString());
+                    c.setWebsite(ds.child("website").getValue().toString());
+                    c.setImageUri(ds.child("imageUri").getValue().toString());
                     mData.add(c);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -115,16 +115,16 @@ public class CardsListFragment extends Fragment {
             public void onClick(int index) {
                 Log.d("TAG","item click: " + index);
                 //Navigation.findNavController(view).navigate(R.id.action_cardsListFragment_to_cardDetailsFragment);
-                Upload card = mData.elementAt(index);
+                Card card = mData.elementAt(index);
                 CardsListFragmentDirections.ActionCardsListFragmentToCardDetailsFragment action =
                         CardsListFragmentDirections.actionCardsListFragmentToCardDetailsFragment(
-                                card.mName,
-                                card.mPhone,
-                                card.mCompany,
-                                card.mAddress,
-                                card.mEmail,
-                                card.mWebsite,
-                                Uri.parse(card.mImageUri)
+                                card.getPersonName(),
+                                card.getPhoneNumber(),
+                                card.getCompany(),
+                                card.getAddress(),
+                                card.getEmail(),
+                                card.getWebsite(),
+                                Uri.parse(card.getImageUri())
                         );
                 Navigation.findNavController(view).navigate(action);
             }
@@ -133,6 +133,8 @@ public class CardsListFragment extends Fragment {
         mAddCardBtn = view.findViewById(R.id.cards_list_add_bt);
         mAddCardBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_newCardFragment));
 
+        mShareCardsBtn = view.findViewById(R.id.cards_list_share_bt);
+        mShareCardsBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_usersListFragment));
 
         mProgressBar = view.findViewById(R.id.cards_list_pb);
         mProgressBar.setVisibility(View.INVISIBLE);

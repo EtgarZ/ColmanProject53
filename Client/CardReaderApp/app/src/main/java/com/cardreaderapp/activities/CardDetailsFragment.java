@@ -14,13 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cardreaderapp.R;
-import com.cardreaderapp.adapters.CardsListAdapter;
 import com.cardreaderapp.models.Card;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -164,15 +162,15 @@ public class CardDetailsFragment extends Fragment {
         intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
         // Send card data to contact intent
-        intent.putExtra(ContactsContract.Intents.Insert.NAME, card.GetPersonName())
-                .putExtra(ContactsContract.Intents.Insert.PHONE, card.GetPhoneNumber())
+        intent.putExtra(ContactsContract.Intents.Insert.NAME, card.getPersonName())
+                .putExtra(ContactsContract.Intents.Insert.PHONE, card.getPhoneNumber())
                 .putExtra(ContactsContract.Intents.Insert.PHONE_TYPE,
                         ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
-                .putExtra(ContactsContract.Intents.Insert.EMAIL, card.GetEmail())
+                .putExtra(ContactsContract.Intents.Insert.EMAIL, card.getEmail())
                 .putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE,
                         ContactsContract.CommonDataKinds.Email.TYPE_WORK)
-                .putExtra(ContactsContract.Intents.Insert.COMPANY, card.GetCompany())
-                .putExtra(ContactsContract.Intents.Insert.POSTAL, card.GetAddress())
+                .putExtra(ContactsContract.Intents.Insert.COMPANY, card.getCompany())
+                .putExtra(ContactsContract.Intents.Insert.POSTAL, card.getAddress())
                 .putExtra(ContactsContract.Intents.Insert.POSTAL_TYPE,
                         ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK);
 
@@ -180,7 +178,7 @@ public class CardDetailsFragment extends Fragment {
 
         ContentValues row1 = new ContentValues();
         row1.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE);
-        row1.put(ContactsContract.CommonDataKinds.Website.DATA1, card.GetWebsite());
+        row1.put(ContactsContract.CommonDataKinds.Website.DATA1, card.getWebsite());
         data.add(row1);
 
         intent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data);

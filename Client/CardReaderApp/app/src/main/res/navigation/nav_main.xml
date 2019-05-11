@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_cardsListFragment_to_cardDetailsFragment"
             app:destination="@id/cardDetailsFragment" />
+        <action
+            android:id="@+id/action_cardsListFragment_to_usersListFragment"
+            app:destination="@id/usersListFragment" />
     </fragment>
     <fragment
         android:id="@+id/newCardFragment"
@@ -106,4 +109,9 @@
             app:popUpTo="@+id/cardsListFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/usersListFragment"
+        android:name="com.cardreaderapp.activities.UsersListFragment"
+        android:label="fragment_users_list"
+        tools:layout="@layout/fragment_users_list" />
 </navigation>

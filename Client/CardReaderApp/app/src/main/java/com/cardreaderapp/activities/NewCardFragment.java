@@ -1,13 +1,9 @@
 package com.cardreaderapp.activities;
 
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +24,6 @@ import com.cardreaderapp.R;
 import com.cardreaderapp.api.RestService;
 import com.cardreaderapp.models.Card;
 import com.cardreaderapp.utils.Base64Converter;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -38,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -186,12 +178,12 @@ public class NewCardFragment extends Fragment {
     {
         NewCardFragmentDirections.ActionNewCardFragmentToEditCardDetailsFragment action =
                 NewCardFragmentDirections.actionNewCardFragmentToEditCardDetailsFragment(
-                                card.GetPersonName(),
-                                card.GetPhoneNumber(),
-                                card.GetCompany(),
-                                card.GetAddress(),
-                                card.GetEmail(),
-                                card.GetWebsite(),
+                                card.getPersonName(),
+                                card.getPhoneNumber(),
+                                card.getCompany(),
+                                card.getAddress(),
+                                card.getEmail(),
+                                card.getWebsite(),
                                 imageUri,
                         true
                         );

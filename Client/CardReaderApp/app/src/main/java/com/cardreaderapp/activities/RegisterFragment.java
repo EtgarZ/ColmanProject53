@@ -13,19 +13,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cardreaderapp.R;
+import com.cardreaderapp.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 
@@ -45,11 +55,14 @@ public class RegisterFragment extends Fragment {
     boolean mIsSignIn=true;
     EditText mEmailtxt;
     EditText mPasswordtxt;
+    EditText mNameTxt;
+    CheckBox mIsProCb;
     Button mRegisterbtn;
     TextView mTitletxt;
     TextView mSwitchRegSignIntxt;
     ProgressDialog mProgressDialog;
     FirebaseAuth mFireBashAuth;
+    DatabaseReference mDatabaseRef;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -94,24 +107,34 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_register, container, false);
+
         mProgressDialog= new ProgressDialog(getActivity());
         mFireBashAuth=FirebaseAuth.getInstance();
-        mTitletxt=(TextView) view.findViewById(R.id.Register_Titlettxt);
-        mEmailtxt=(EditText) view.findViewById(R.id.Register_emailtxt);
-        mPasswordtxt=(EditText) view.findViewById(R.id.Register_passwordtxt);
-        mRegisterbtn=(Button) view.findViewById(R.id.Register_registerBtn);
-        mSwitchRegSignIntxt=view.findViewById(R.id.Register_switchRegisterSignIn);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users");
+
+        mTitletxt = view.findViewById(R.id.Register_Titlettxt);
+        mNameTxt = view.findViewById(R.id.Register_name_txt);
+        mEmailtxt = view.findViewById(R.id.Register_emailtxt);
+        mPasswordtxt = view.findViewById(R.id.Register_passwordtxt);
+        mIsProCb = view.findViewById(R.id.Register_isPro_cb);
+        mRegisterbtn = view.findViewById(R.id.Register_registerBtn);
+        mSwitchRegSignIntxt = view.findViewById(R.id.Register_switchRegisterSignIn);
+
         mSwitchRegSignIntxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mIsSignIn) {
                     mRegisterbtn.setText("Register");
-                    mTitletxt.setText("User Registeration");
+                    mTitletxt.setText("User Registration");
+                    mNameTxt.setVisibility(View.VISIBLE);
+                    mIsProCb.setVisibility(View.VISIBLE);
                     mSwitchRegSignIntxt.setText("have an account? Sign in here");
                 }
                 else {
                     mRegisterbtn.setText("Login");
                     mTitletxt.setText("User Login");
+                    mNameTxt.setVisibility(View.GONE);
+                    mIsProCb.setVisibility(View.GONE);
                     mSwitchRegSignIntxt.setText("Not have an account? Register here");
                 }
                 mIsSignIn=!mIsSignIn;
@@ -120,13 +143,14 @@ public class RegisterFragment extends Fragment {
         mRegisterbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = mEmailtxt.getText().toString().trim();
+                final Boolean isPro = mIsProCb.isChecked();
+                final String name = mNameTxt.getText().toString();
+                final String email = mEmailtxt.getText().toString().trim();
                 String password = mPasswordtxt.getText().toString().trim();
-                if (email.isEmpty() || password.isEmpty()
-                        || !VALID_EMAIL_ADDRESS_REGEX.matcher(email).find()) {
-                    Toast.makeText(getActivity(), "Email or Password is not Valid!", Toast.LENGTH_LONG).show();
+
+                if(!isFormValid(name, email, password))
                     return;
-                }
+
                 mProgressDialog.setMessage("Registering user...");
                 mProgressDialog.show();
                 if(!mIsSignIn) {
@@ -137,6 +161,10 @@ public class RegisterFragment extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        // create user in DB
+                                        final FirebaseUser currentUser = mFireBashAuth.getCurrentUser();
+                                        User user = new User(name, email, isPro, FirebaseInstanceId.getInstance().getToken());
+                                        mDatabaseRef.child(currentUser.getUid()).setValue(user);
                                         mProgressDialog.dismiss();
                                         //register completed and logged in.
                                         Toast.makeText(getActivity(), "Registeraion Successfull!", Toast.LENGTH_LONG).show();
@@ -148,6 +176,12 @@ public class RegisterFragment extends Fragment {
                                     }
 
                                 }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
                             });
                 }
                 else {
@@ -157,6 +191,12 @@ public class RegisterFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+
+                                final FirebaseUser currentUser = mFireBashAuth.getCurrentUser();
+                                Map<String, Object> tokenMap = new HashMap<>();
+                                tokenMap.put("token", FirebaseInstanceId.getInstance().getToken());
+                                mDatabaseRef.child(currentUser.getUid()).updateChildren(tokenMap);
+
                                 mProgressDialog.dismiss();
                                 //register completed and logged in.
                                 Toast.makeText(getActivity(), "Sign In Successfull!", Toast.LENGTH_LONG).show();
@@ -175,6 +215,25 @@ public class RegisterFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private Boolean isFormValid(String name, String email, String password){
+        if (!mIsSignIn && name.isEmpty()) {
+            Toast.makeText(getActivity(), "Must enter your name!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (email.isEmpty() || !VALID_EMAIL_ADDRESS_REGEX.matcher(email).find()) {
+            Toast.makeText(getActivity(), "Email or Password is not valid!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (password.isEmpty() || password.length()<6){
+            Toast.makeText(getActivity(), "Must enter at least 6 chars length password!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cardreaderapp.R;
-import com.cardreaderapp.models.Upload;
+import com.cardreaderapp.models.Card;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +29,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -71,7 +70,7 @@ public class EditCardDetailsFragment extends Fragment {
 
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mStorageRef = FirebaseStorage.getInstance().getReference("Uploads/" + mUserId);
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users/" + mUserId);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users/" + mUserId + "/Cards");
 
         String name =  EditCardDetailsFragmentArgs.fromBundle(getArguments()).getName();
         String phone =  EditCardDetailsFragmentArgs.fromBundle(getArguments()).getPhone();
@@ -124,9 +123,9 @@ public class EditCardDetailsFragment extends Fragment {
         final String website =  mWebsite.getText().toString();
 
         if (mIsNewCard){
-            Upload upload = new Upload(name, phone, company, address, email, website, downloadUri.toString());
-            String uploadId = mDatabaseRef.push().getKey();
-            mDatabaseRef.child(uploadId).setValue(upload);
+            Card card = new Card(name, phone, company, address, email, website, downloadUri.toString());
+            String cardId = mDatabaseRef.push().getKey();
+            mDatabaseRef.child(cardId).setValue(card);
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
             }
@@ -134,14 +133,7 @@ public class EditCardDetailsFragment extends Fragment {
         }
         else{
             // Edit record
-            final Upload upload = new Upload();
-            upload.mAddress = address;
-            upload.mCompany = company;
-            upload.mEmail = email;
-            upload.mName = name;
-            upload.mPhone = phone;
-            upload.mWebsite = website;
-            upload.mImageUri = mImageUri.toString();
+            final Card card = new Card(name, phone, company, address, email, website, mImageUri.toString());
 
             mDatabaseRef.addListenerForSingleValueEvent(
                     new ValueEventListener() {
@@ -152,10 +144,10 @@ public class EditCardDetailsFragment extends Fragment {
                             for (Map.Entry<String, Object> entry : cards.entrySet()){
 
                                 //Get card map
-                                Map card = (Map) entry.getValue();
-                                if (card.get("mImageUri").toString() == mImageUri.toString()){
+                                Map cardEntry = (Map) entry.getValue();
+                                if (cardEntry.get("mImageUri").toString() == mImageUri.toString()){
                                     String cardId = entry.getKey();
-                                    mDatabaseRef.child(cardId).setValue(upload);
+                                    mDatabaseRef.child(cardId).setValue(card);
                                     Toast.makeText(getActivity(), "Card updated successfully!", Toast.LENGTH_SHORT).show();
 
                                     if (mDialog.isShowing()) {

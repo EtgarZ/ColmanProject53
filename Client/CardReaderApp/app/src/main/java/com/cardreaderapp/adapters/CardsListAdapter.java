@@ -11,16 +11,15 @@ import android.widget.TextView;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.models.Card;
-import com.cardreaderapp.models.Upload;
 import com.squareup.picasso.Picasso;
 
 import java.util.Vector;
 
 public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.CardRowViewHolder> {
-    public static Vector<Upload> mData;
+    public static Vector<Card> mData;
     OnItemClickListener mListener;
 
-    public CardsListAdapter(Vector<Upload> data) {
+    public CardsListAdapter(Vector<Card> data) {
         mData = data;
     }
     public interface OnItemClickListener{
@@ -41,7 +40,7 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
 
     @Override
     public void onBindViewHolder(@NonNull CardRowViewHolder cardRowViewHolder, int i) {
-        Upload card = mData.elementAt(i);
+        Card card = mData.elementAt(i);
         cardRowViewHolder.bind(card);
     }
 
@@ -76,10 +75,10 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
             });
         }
 
-        public void bind(Upload card){
-            mName.setText(card.mName);
-            mPhone.setText(card.mPhone);
-            Picasso.with(itemView.getContext()).load(card.mImageUri)
+        public void bind(Card card){
+            mName.setText(card.getPersonName());
+            mPhone.setText(card.getPhoneNumber());
+            Picasso.with(itemView.getContext()).load(card.getImageUri())
                     .fit().centerCrop().into(mAvatar);
         }
     }

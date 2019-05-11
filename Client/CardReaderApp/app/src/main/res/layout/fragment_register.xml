@@ -5,53 +5,73 @@
     android:gravity="center"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/Register_Titlettxt"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:text="User Login"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            <TextView
+                android:id="@+id/Register_Titlettxt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="User Login"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
 
-            />
+                />
 
-        <EditText
-            android:id="@+id/Register_emailtxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:hint="Enter your Email"
-            android:inputType="textEmailAddress" />
+            <EditText
+                android:id="@+id/Register_name_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:hint="Enter your Name"
+                android:inputType="textPersonName"
+                android:visibility="gone" />
 
-        <EditText
-            android:id="@+id/Register_passwordtxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:hint="Enter your password"
-            android:inputType="textPassword" />
+            <EditText
+                android:id="@+id/Register_emailtxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:hint="Enter your Email"
+                android:inputType="textEmailAddress" />
 
-        <Button
-            android:id="@+id/Register_registerBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="Login" />
+            <EditText
+                android:id="@+id/Register_passwordtxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:hint="Enter your password"
+                android:inputType="textPassword" />
 
-        <TextView
-            android:id="@+id/Register_switchRegisterSignIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/design_default_color_primary"
-            android:textAlignment="center"
-            android:textSize="10dp"
-            android:text="Not have an account? Register here" />
+            <CheckBox
+                android:id="@+id/Register_isPro_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="Professional"
+                android:visibility="gone" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/Register_registerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="Login" />
 
+            <TextView
+                android:id="@+id/Register_switchRegisterSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/design_default_color_primary"
+                android:textAlignment="center"
+                android:textSize="10dp"
+                android:text="Not have an account? Register here" />
+
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
