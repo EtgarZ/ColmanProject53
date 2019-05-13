@@ -35,7 +35,9 @@ exports.sendNotification = functions.database.ref("/Users/{user_id}/Shares/{shar
             const token_id = result[1].val().token;
 
             const payload = {
-                notification : {
+                data : {
+                    from_user_id: from_user_id,
+                    to_user_id: to_user_id,
                     title : "notification from " + from_name,
                     body: "I want to share my contacts with you",
                     icon: "default"

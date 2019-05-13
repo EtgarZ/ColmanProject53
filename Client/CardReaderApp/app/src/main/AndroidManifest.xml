@@ -26,6 +26,19 @@
             </intent-filter>
         </activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <service android:name=".utils.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
+            </intent-filter>
+        </service>
+        <receiver android:name=".utils.NotificationAgreeListener">
+            <intent-filter>
+                <action android:name="button_click"/>
+            </intent-filter>
+        </receiver>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="CH_01"/>
     </application>
 
 </manifest>
