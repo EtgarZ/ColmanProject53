@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/cardsListFragment"
         android:name="com.cardreaderapp.activities.CardsListFragment"
-        android:label="fragment_cards_list"
+        android:label="My Cards"
         tools:layout="@layout/fragment_cards_list" >
         <action
             android:id="@+id/action_cardsListFragment_to_newCardFragment"
@@ -23,7 +23,7 @@
     <fragment
         android:id="@+id/newCardFragment"
         android:name="com.cardreaderapp.activities.NewCardFragment"
-        android:label="fragment_new_card"
+        android:label="Create Card"
         tools:layout="@layout/fragment_new_card" >
         <action
             android:id="@+id/action_newCardFragment_to_editCardDetailsFragment"
@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/cardDetailsFragment"
         android:name="com.cardreaderapp.activities.CardDetailsFragment"
-        android:label="fragment_card_details"
+        android:label="Card Details"
         tools:layout="@layout/fragment_card_details" >
         <action
             android:id="@+id/action_cardDetailsFragment_to_editCardDetailsFragment"
@@ -78,7 +78,7 @@
     <fragment
         android:id="@+id/editCardDetailsFragment"
         android:name="com.cardreaderapp.activities.EditCardDetailsFragment"
-        android:label="fragment_edit_card_details"
+        android:label="Edit Card"
         tools:layout="@layout/fragment_edit_card_details" >
         <argument
             android:name="Name"
@@ -112,6 +112,6 @@
     <fragment
         android:id="@+id/usersListFragment"
         android:name="com.cardreaderapp.activities.UsersListFragment"
-        android:label="fragment_users_list"
+        android:label="Users"
         tools:layout="@layout/fragment_users_list" />
 </navigation>

@@ -145,7 +145,7 @@ public class EditCardDetailsFragment extends Fragment {
 
                                 //Get card map
                                 Map cardEntry = (Map) entry.getValue();
-                                if (cardEntry.get("mImageUri").toString() == mImageUri.toString()){
+                                if (cardEntry.get("imageUri").toString() == mImageUri.toString()){
                                     String cardId = entry.getKey();
                                     mDatabaseRef.child(cardId).setValue(card);
                                     Toast.makeText(getActivity(), "Card updated successfully!", Toast.LENGTH_SHORT).show();

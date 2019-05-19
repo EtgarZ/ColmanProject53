@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class CardDetailsFragment extends Fragment {
 
     private Uri mImageUri;
 
-    private Button mEditBtn;
+    private ImageButton mEditBtn;
     private Button mExportBtn;
     private Button mDeleteBtn;
 
@@ -111,14 +112,15 @@ public class CardDetailsFragment extends Fragment {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 //Get map of cards in datasnapshot
-                                Map<String,Object> cards = (Map<String,Object>) dataSnapshot.getValue();
+                                Map<String,Object> user = (Map<String,Object>) dataSnapshot.getValue();
+                                Map<String,Object> cards = (Map<String,Object>) user.get("Cards");
                                 for (Map.Entry<String, Object> entry : cards.entrySet()){
 
                                     //Get card map
                                     Map card = (Map) entry.getValue();
-                                    if (card.get("mImageUri").toString() == mImageUri.toString()){
+                                    if (card.get("imageUri").toString() == mImageUri.toString()){
                                         String cardId = entry.getKey();
-                                        mDatabaseRef.child(cardId).removeValue();
+                                        mDatabaseRef.child("Cards").child(cardId).removeValue();
                                         Toast.makeText(view.getContext(), "Card deleted successfully!", Toast.LENGTH_SHORT).show();
                                         Navigation.findNavController(view).navigate(R.id.action_cardDetailsFragment_to_cardsListFragment);
                                         return;

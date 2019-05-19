@@ -112,7 +112,7 @@ public class RegisterFragment extends Fragment {
         mFireBashAuth=FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users");
 
-        mTitletxt = view.findViewById(R.id.Register_Titlettxt);
+        //mTitletxt = view.findViewById(R.id.Register_Titlettxt);
         mNameTxt = view.findViewById(R.id.Register_name_txt);
         mEmailtxt = view.findViewById(R.id.Register_emailtxt);
         mPasswordtxt = view.findViewById(R.id.Register_passwordtxt);
@@ -125,17 +125,19 @@ public class RegisterFragment extends Fragment {
             public void onClick(View v) {
                 if(mIsSignIn) {
                     mRegisterbtn.setText("Register");
-                    mTitletxt.setText("User Registration");
+                    //mTitletxt.setText("User Registration");
                     mNameTxt.setVisibility(View.VISIBLE);
                     mIsProCb.setVisibility(View.VISIBLE);
                     mSwitchRegSignIntxt.setText("have an account? Sign in here");
+                    getActivity().setTitle("Register");
                 }
                 else {
                     mRegisterbtn.setText("Login");
-                    mTitletxt.setText("User Login");
+                    //mTitletxt.setText("User Login");
                     mNameTxt.setVisibility(View.GONE);
                     mIsProCb.setVisibility(View.GONE);
                     mSwitchRegSignIntxt.setText("Not have an account? Register here");
+                    getActivity().setTitle("Login");
                 }
                 mIsSignIn=!mIsSignIn;
             }
