@@ -108,6 +108,8 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_register, container, false);
 
+        getActivity().setTitle("Login");
+
         mProgressDialog= new ProgressDialog(getActivity());
         mFireBashAuth=FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users");
