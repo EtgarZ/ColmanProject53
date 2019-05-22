@@ -11,6 +11,9 @@ import androidx.navigation.Navigation;
 
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.models.Card;
@@ -35,7 +39,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CardDetailsFragment extends Fragment {
+public class CardDetailsFragment extends Fragment  {
 
     private TextView mName;
     private TextView mPhone;
@@ -45,11 +49,15 @@ public class CardDetailsFragment extends Fragment {
     private TextView mWebsite;
     private ImageView mImageView;
 
+    private String name;
+    private String phone;
+    private String company;
+    private String address;
+    private String email;
+    private String website;
     private Uri mImageUri;
 
-    private ImageButton mEditBtn;
     private Button mExportBtn;
-    private Button mDeleteBtn;
 
     private DatabaseReference mDatabaseRef;
     private String mUserId;
@@ -57,37 +65,26 @@ public class CardDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_card_details, container, false);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu items for use in the action bar
+        inflater.inflate(R.menu.menu_card_details, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users/" +mUserId);
 
-        final String name =  CardDetailsFragmentArgs.fromBundle(getArguments()).getName();
-        final String phone =  CardDetailsFragmentArgs.fromBundle(getArguments()).getPhone();
-        final String company =  CardDetailsFragmentArgs.fromBundle(getArguments()).getCompany();
-        final String address =  CardDetailsFragmentArgs.fromBundle(getArguments()).getAddress();
-        final String email =  CardDetailsFragmentArgs.fromBundle(getArguments()).getEmail();
-        final String website =  CardDetailsFragmentArgs.fromBundle(getArguments()).getWebsite();
-        mImageUri = CardDetailsFragmentArgs.fromBundle(getArguments()).getImageUri();
 
-        mName = view.findViewById(R.id.card_details_name_tv);
-        mPhone = view.findViewById(R.id.card_details_phone_tv);
-        mCompany = view.findViewById(R.id.card_details_company_tv);
-        mAddress = view.findViewById(R.id.card_details_address_tv);
-        mEmail = view.findViewById(R.id.card_details_email_tv);
-        mWebsite = view.findViewById(R.id.card_details_website_tv);
-        mImageView = view.findViewById(R.id.card_details_imageView);
-
-        mEditBtn = view.findViewById(R.id.card_details_edit_btn);
-        mEditBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Navigation.findNavController(v).navigate(R.id.action_cardDetailsFragment_to_editCardDetailsFragment);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.card_details_edit_item:
+                //do sth here
                 CardDetailsFragmentDirections.ActionCardDetailsFragmentToEditCardDetailsFragment action =
                         CardDetailsFragmentDirections.actionCardDetailsFragmentToEditCardDetailsFragment(
                                 name,
@@ -99,14 +96,10 @@ public class CardDetailsFragment extends Fragment {
                                 mImageUri,
                                 false
                         );
-                Navigation.findNavController(v).navigate(action);
-            }
-        });
-
-        mDeleteBtn = view.findViewById(R.id.card_details_delete_btn);
-        mDeleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                Navigation.findNavController(getView()).navigate(action);
+                return true;
+            case R.id.card_details_delete_item:
+                //do sth here
                 mDatabaseRef.addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
@@ -118,11 +111,11 @@ public class CardDetailsFragment extends Fragment {
 
                                     //Get card map
                                     Map card = (Map) entry.getValue();
-                                    if (card.get("imageUri").toString() == mImageUri.toString()){
+                                    if (card.get("imageUri").toString().equals(mImageUri.toString())){
                                         String cardId = entry.getKey();
                                         mDatabaseRef.child("Cards").child(cardId).removeValue();
-                                        Toast.makeText(view.getContext(), "Card deleted successfully!", Toast.LENGTH_SHORT).show();
-                                        Navigation.findNavController(view).navigate(R.id.action_cardDetailsFragment_to_cardsListFragment);
+                                        Toast.makeText(getView().getContext(), "Card deleted successfully!", Toast.LENGTH_SHORT).show();
+                                        Navigation.findNavController(getView()).navigate(R.id.action_cardDetailsFragment_to_cardsListFragment);
                                         return;
                                     }
                                 }
@@ -134,8 +127,35 @@ public class CardDetailsFragment extends Fragment {
                                 //handle databaseError
                             }
                         });
-            }
-        });
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        final View view = inflater.inflate(R.layout.fragment_card_details, container, false);
+
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users/" +mUserId);
+
+        name =  CardDetailsFragmentArgs.fromBundle(getArguments()).getName();
+        phone =  CardDetailsFragmentArgs.fromBundle(getArguments()).getPhone();
+        company =  CardDetailsFragmentArgs.fromBundle(getArguments()).getCompany();
+        address =  CardDetailsFragmentArgs.fromBundle(getArguments()).getAddress();
+        email =  CardDetailsFragmentArgs.fromBundle(getArguments()).getEmail();
+        website =  CardDetailsFragmentArgs.fromBundle(getArguments()).getWebsite();
+        mImageUri = CardDetailsFragmentArgs.fromBundle(getArguments()).getImageUri();
+
+        mName = view.findViewById(R.id.card_details_name_tv);
+        mPhone = view.findViewById(R.id.card_details_phone_tv);
+        mCompany = view.findViewById(R.id.card_details_company_tv);
+        mAddress = view.findViewById(R.id.card_details_address_tv);
+        mEmail = view.findViewById(R.id.card_details_email_tv);
+        mWebsite = view.findViewById(R.id.card_details_website_tv);
+        mImageView = view.findViewById(R.id.card_details_imageView);
 
         mExportBtn = view.findViewById(R.id.card_details_export_btn);
         mExportBtn.setOnClickListener(new View.OnClickListener() {
@@ -188,5 +208,6 @@ public class CardDetailsFragment extends Fragment {
         // Open contact member and fill details from card
         startActivity(intent);
     }
+
 
 }

@@ -28,9 +28,18 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home){
-            mNavController.navigateUp();
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                mNavController.navigateUp();
+                break;
+            case R.id.card_details_edit_item:
+                return false; // will handle in fragment callback
+            case R.id.card_details_delete_item:
+                return false; // will handle in fragment callback
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

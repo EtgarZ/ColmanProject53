@@ -1,467 +1,398 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/card_details_edit_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_details_imageView">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal|center_vertical">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@drawable/baseline_perm_identity_black_18dp" />
-
-            <TextView
-                android:id="@+id/card_details_name_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Name"
-                app:layout_constraintEnd_toStartOf="@+id/card_details_name_tv"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_details_imageView" />
-
-            <TextView
-                android:id="@+id/card_details_name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_details_imageView" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <View
-                android:id="@+id/line1"
-                android:layout_width="0dip"
-                android:layout_height="0dip"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8ff" />
-
-            <View
-                android:id="@+id/line2"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8" />
-
-            <View
-                android:id="@+id/line3"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_weight="1"
-                android:background="#e4e6e8"
-                android:paddingRight="2dip" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal|center_vertical">
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@drawable/baseline_call_black_18dp" />
-
-            <TextView
-                android:id="@+id/card_details_phone_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Phone"
-                app:layout_constraintEnd_toStartOf="@+id/card_details_phone_tv"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="127dp" />
-
-            <TextView
-                android:id="@+id/card_details_phone_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="127dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <View
-                android:id="@+id/line4"
-                android:layout_width="0dip"
-                android:layout_height="0dip"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8ff" />
-
-            <View
-                android:id="@+id/line5"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8" />
-
-            <View
-                android:id="@+id/line6"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_weight="1"
-                android:background="#e4e6e8"
-                android:paddingRight="2dip" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal|center_vertical">
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@drawable/baseline_account_balance_black_18dp" />
-
-            <TextView
-                android:id="@+id/card_details_company_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Company"
-                app:layout_constraintEnd_toStartOf="@+id/card_details_company_tv"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="146dp" />
-
-            <TextView
-                android:id="@+id/card_details_company_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="146dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <View
-                android:id="@+id/line7"
-                android:layout_width="0dip"
-                android:layout_height="0dip"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8ff" />
-
-            <View
-                android:id="@+id/line8"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8" />
-
-            <View
-                android:id="@+id/line9"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_weight="1"
-                android:background="#e4e6e8"
-                android:paddingRight="2dip" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal|center_vertical">
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@drawable/baseline_location_on_black_18dp" />
-
-            <TextView
-                android:id="@+id/card_details_address_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Address"
-                app:layout_constraintEnd_toStartOf="@+id/card_details_address_tv"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="165dp" />
-
-            <TextView
-                android:id="@+id/card_details_address_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="165dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <View
-                android:id="@+id/line10"
-                android:layout_width="0dip"
-                android:layout_height="0dip"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8ff" />
-
-            <View
-                android:id="@+id/line11"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8" />
-
-            <View
-                android:id="@+id/line12"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_weight="1"
-                android:background="#e4e6e8"
-                android:paddingRight="2dip" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal|center_vertical">
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@drawable/baseline_mail_outline_black_18dp" />
-
-            <TextView
-                android:id="@+id/card_details_email_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Email"
-                app:layout_constraintEnd_toStartOf="@+id/card_details_email_tv"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="184dp" />
-
-            <TextView
-                android:id="@+id/card_details_email_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="184dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <View
-                android:id="@+id/line13"
-                android:layout_width="0dip"
-                android:layout_height="0dip"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8ff" />
-
-            <View
-                android:id="@+id/line14"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="1"
-                android:background="#e4e6e8" />
-
-            <View
-                android:id="@+id/line15"
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_weight="1"
-                android:background="#e4e6e8"
-                android:paddingRight="2dip" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal|center_vertical">
-
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@drawable/baseline_language_black_18dp" />
-
-            <TextView
-                android:id="@+id/card_details_website_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Website"
-                app:layout_constraintEnd_toStartOf="@+id/card_details_website_tv"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="203dp" />
-
-            <TextView
-                android:id="@+id/card_details_website_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="203dp" />
-        </TableRow>
-    </TableLayout>
-
-    <Button
-        android:id="@+id/card_details_delete_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/card_details_export_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Export"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/card_details_edit_btn"
-        app:layout_constraintStart_toEndOf="@+id/card_details_delete_btn"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ImageView
-        android:id="@+id/card_details_imageView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/avatar" />
+        android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/card_details_edit_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/baseline_edit_black_18dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/card_details_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:srcCompat="@drawable/avatar" />
+
+            <TableLayout
+                android:id="@+id/tableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/baseline_perm_identity_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/card_details_name_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="Name" />
+
+                    <TextView
+                        android:id="@+id/card_details_name_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="TextView"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:id="@+id/line1"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip"
+                        android:layout_marginRight="8dp"
+                        android:background="#e4e6e8ff" />
+
+                    <View
+                        android:id="@+id/line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_marginLeft="8dp"
+                        android:background="#e4e6e8" />
+
+                    <View
+                        android:id="@+id/line3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#e4e6e8"
+                        android:paddingRight="2dip" />
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/baseline_call_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/card_details_phone_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="Phone" />
+
+                    <TextView
+                        android:id="@+id/card_details_phone_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="TextView"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:id="@+id/line4"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip"
+                        android:layout_marginRight="8dp"
+                        android:background="#e4e6e8ff" />
+
+                    <View
+                        android:id="@+id/line5"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_marginLeft="8dp"
+                        android:background="#e4e6e8" />
+
+                    <View
+                        android:id="@+id/line6"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#e4e6e8"
+                        android:paddingRight="2dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/baseline_mail_outline_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/card_details_email_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="Email" />
+
+                    <TextView
+                        android:id="@+id/card_details_email_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="TextView"
+                        android:layout_weight="1" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:id="@+id/line7"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip"
+                        android:layout_marginRight="8dp"
+                        android:background="#e4e6e8ff" />
+
+                    <View
+                        android:id="@+id/line8"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_marginLeft="8dp"
+                        android:background="#e4e6e8" />
+
+                    <View
+                        android:id="@+id/line9"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#e4e6e8"
+                        android:paddingRight="2dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/baseline_account_balance_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/card_details_company_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="Company" />
+
+                    <TextView
+                        android:id="@+id/card_details_company_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="TextView"
+                        android:layout_weight="1" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:id="@+id/line10"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip"
+                        android:layout_marginRight="8dp"
+                        android:background="#e4e6e8ff" />
+
+                    <View
+                        android:id="@+id/line11"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_marginLeft="8dp"
+                        android:background="#e4e6e8" />
+
+                    <View
+                        android:id="@+id/line12"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#e4e6e8"
+                        android:paddingRight="2dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/baseline_location_on_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/card_details_address_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="Address" />
+
+                    <TextView
+                        android:id="@+id/card_details_address_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="TextView"
+                        android:layout_weight="1" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:id="@+id/line13"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:background="#e4e6e8ff" />
+
+                    <View
+                        android:id="@+id/line14"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:background="#e4e6e8" />
+
+                    <View
+                        android:id="@+id/line15"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_weight="1"
+                        android:background="#e4e6e8"
+                        android:paddingRight="2dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/baseline_language_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/card_details_website_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="Website" />
+
+                    <TextView
+                        android:id="@+id/card_details_website_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="TextView"
+                        android:layout_weight="1" />
+                </TableRow>
+            </TableLayout>
+
+            <FrameLayout android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button android:id="@+id/card_details_export_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:alpha="0.1"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/baseline_system_update_black_18dp"
+                    android:elevation="2dp"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
