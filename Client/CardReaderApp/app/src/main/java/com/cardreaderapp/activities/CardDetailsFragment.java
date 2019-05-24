@@ -1,7 +1,9 @@
 package com.cardreaderapp.activities;
 
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,12 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.models.Card;
@@ -56,8 +55,6 @@ public class CardDetailsFragment extends Fragment  {
     private String email;
     private String website;
     private Uri mImageUri;
-
-    private Button mExportBtn;
 
     private DatabaseReference mDatabaseRef;
     private String mUserId;
@@ -100,36 +97,74 @@ public class CardDetailsFragment extends Fragment  {
                 return true;
             case R.id.card_details_delete_item:
                 //do sth here
-                mDatabaseRef.addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                //Get map of cards in datasnapshot
-                                Map<String,Object> user = (Map<String,Object>) dataSnapshot.getValue();
-                                Map<String,Object> cards = (Map<String,Object>) user.get("Cards");
-                                for (Map.Entry<String, Object> entry : cards.entrySet()){
+                openDeleteCardDialog();
+                return true;
 
-                                    //Get card map
-                                    Map card = (Map) entry.getValue();
-                                    if (card.get("imageUri").toString().equals(mImageUri.toString())){
-                                        String cardId = entry.getKey();
-                                        mDatabaseRef.child("Cards").child(cardId).removeValue();
-                                        Toast.makeText(getView().getContext(), "Card deleted successfully!", Toast.LENGTH_SHORT).show();
-                                        Navigation.findNavController(getView()).navigate(R.id.action_cardDetailsFragment_to_cardsListFragment);
-                                        return;
-                                    }
-                                }
-                                Toast.makeText(getActivity(), "Couldn't delete card..", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                //handle databaseError
-                            }
-                        });
+            case R.id.card_details_add_contact_item:
+                //do sth here
+                openContact(new Card(name,phone,company,address,email,website));
                 return true;
         }
         return false;
+    }
+
+    private DialogInterface.OnClickListener createDeleteDialog()
+    {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        deleteCard();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+    }
+
+    private void openDeleteCardDialog()
+    {
+        DialogInterface.OnClickListener dialogClickListener = createDeleteDialog();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
+        builder.setMessage("You are about to delete card.\nConfirm to proceed")
+                .setPositiveButton("Confirm", dialogClickListener)
+                .setNegativeButton("Cancel", dialogClickListener).show();
+    }
+
+    private void deleteCard()
+    {
+        mDatabaseRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //Get map of cards in datasnapshot
+                        Map<String,Object> user = (Map<String,Object>) dataSnapshot.getValue();
+                        Map<String,Object> cards = (Map<String,Object>) user.get("Cards");
+                        for (Map.Entry<String, Object> entry : cards.entrySet()){
+
+                            //Get card map
+                            Map card = (Map) entry.getValue();
+                            if (card.get("imageUri").toString().equals(mImageUri.toString())){
+                                String cardId = entry.getKey();
+                                mDatabaseRef.child("Cards").child(cardId).removeValue();
+                                Toast.makeText(getView().getContext(), "Card deleted successfully!", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(getView()).navigate(R.id.action_cardDetailsFragment_to_cardsListFragment);
+                                return;
+                            }
+                        }
+                        Toast.makeText(getActivity(), "Couldn't delete card..", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
     }
 
     @Override
@@ -156,15 +191,6 @@ public class CardDetailsFragment extends Fragment  {
         mEmail = view.findViewById(R.id.card_details_email_tv);
         mWebsite = view.findViewById(R.id.card_details_website_tv);
         mImageView = view.findViewById(R.id.card_details_imageView);
-
-        mExportBtn = view.findViewById(R.id.card_details_export_btn);
-        mExportBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                openContact(new Card(name,phone,company,address,email,website));
-            }
-        });
 
         mName.setText(name);
         mPhone.setText(phone);

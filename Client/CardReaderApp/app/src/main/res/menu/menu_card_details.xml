@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/my_menu">
     <item
+        android:id="@+id/card_details_add_contact_item"
+        android:title=""
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_add_contact_icon_white_18dp"
+        />
+    <item
         android:id="@+id/card_details_edit_item"
         android:title=""
         app:showAsAction="always"

@@ -33,10 +33,8 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 mNavController.navigateUp();
                 break;
-            case R.id.card_details_edit_item:
-                return false; // will handle in fragment callback
-            case R.id.card_details_delete_item:
-                return false; // will handle in fragment callback
+                default:
+                    return false; // will handle in fragment callback
         }
         return super.onOptionsItemSelected(item);
     }

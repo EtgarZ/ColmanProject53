@@ -36,7 +36,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                android:layoutDirection="ltr">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -374,24 +375,6 @@
                         android:layout_weight="1" />
                 </TableRow>
             </TableLayout>
-
-            <FrameLayout android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <Button android:id="@+id/card_details_export_btn"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:alpha="0.1"/>
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/baseline_system_update_black_18dp"
-                    android:elevation="2dp"/>
-
-            </FrameLayout>
 
         </LinearLayout>
     </ScrollView>
