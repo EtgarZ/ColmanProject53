@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
@@ -49,7 +52,6 @@ public class EditCardDetailsFragment extends Fragment {
     private EditText mAddress;
     private EditText mEmail;
     private EditText mWebsite;
-    private Button mSaveBtn;
 
     private boolean mIsNewCard;
     private StorageReference mStorageRef;
@@ -61,6 +63,29 @@ public class EditCardDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu items for use in the action bar
+        inflater.inflate(R.menu.menu_edit_card_details, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.edit_card_details_save_item:
+                //do sth here
+                new BackgroundTask().execute();
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +113,6 @@ public class EditCardDetailsFragment extends Fragment {
         mAddress = view.findViewById(R.id.edit_card_details_address_et);
         mEmail = view.findViewById(R.id.edit_card_details_email_et);
         mWebsite = view.findViewById(R.id.edit_card_details_website_et);
-        mSaveBtn = view.findViewById(R.id.edit_card_details_save_bt);
 
         mImageView.setImageURI(mImageUri);
         mName.setText(name);
@@ -99,13 +123,6 @@ public class EditCardDetailsFragment extends Fragment {
         mWebsite.setText(website);
         //Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
         Picasso.with(this.getContext()).load(mImageUri).fit().into(mImageView);
-
-        mSaveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new BackgroundTask().execute();
-            }
-        });
 
         return view;
     }

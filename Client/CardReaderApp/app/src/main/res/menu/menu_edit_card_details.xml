@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edit_card_details_menu">
+    <item
+        android:id="@+id/edit_card_details_save_item"
+        android:title=""
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_save_icon_white_18dp"
+        />
+</menu>

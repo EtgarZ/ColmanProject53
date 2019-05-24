@@ -1,176 +1,360 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical">
+
+
+<ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/edit_card_details_imageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="100dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:srcCompat="@drawable/avatar" />
 
-            <EditText
-                android:id="@+id/edit_card_details_email_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:text="MyEmail"
-                app:layout_constraintStart_toEndOf="@+id/edit_card_details_email_label"
-                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_address_et" />
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp">
 
-            <EditText
-                android:id="@+id/edit_card_details_company_et"
-                android:layout_width="123dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:text="MyCompany"
-                app:layout_constraintStart_toEndOf="@+id/edit_card_details_company_label"
-                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_phone_et" />
-
-            <TextView
-                android:id="@+id/edit_card_details_phone_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:text="Phone"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_phone_et"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit_card_details_phone_et" />
-
-            <EditText
-                android:id="@+id/edit_card_details_phone_et"
-                android:layout_width="156dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:text="MyPhone"
-                app:layout_constraintStart_toEndOf="@+id/edit_card_details_phone_label"
-                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_name_et" />
-
-            <ImageView
-                android:id="@+id/edit_card_details_imageView"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/avatar" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/edit_card_details_website_label"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/edit_card_details_name_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/baseline_perm_identity_black_18dp" />
+
+                <TextView
+                    android:id="@+id/edit_card_details_name_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Name" />
+
+                <EditText
+                    android:id="@+id/edit_card_details_name_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:text="Website"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_website_et"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit_card_details_website_et" />
+                android:layout_marginTop="8dp">
 
-            <EditText
-                android:id="@+id/edit_card_details_address_et"
-                android:layout_width="115dp"
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="0dip"
+                    android:layout_marginRight="8dp"
+                    android:background="#e4e6e8ff" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="8dp"
+                    android:background="#e4e6e8" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="#e4e6e8"
+                    android:paddingRight="2dip" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:text="MyAddress"
-                app:layout_constraintStart_toEndOf="@+id/edit_card_details_address_label"
-                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_company_et" />
+                android:layout_marginTop="8dp">
 
-            <EditText
-                android:id="@+id/edit_card_details_name_et"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/edit_card_details_phone_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/baseline_call_black_18dp" />
+
+                <TextView
+                    android:id="@+id/edit_card_details_phone_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Phone" />
+
+                <EditText
+                    android:id="@+id/edit_card_details_phone_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:text="MyName"
-                app:layout_constraintStart_toEndOf="@+id/edit_card_details_name_label"
-                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_imageView" />
+                android:layout_marginTop="8dp">
 
-            <TextView
-                android:id="@+id/edit_card_details_name_label"
-                android:layout_width="wrap_content"
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="0dip"
+                    android:layout_marginRight="8dp"
+                    android:background="#e4e6e8ff" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="8dp"
+                    android:background="#e4e6e8" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="#e4e6e8"
+                    android:paddingRight="2dip" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:text="Name"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_name_et"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit_card_details_name_et" />
+                android:layout_marginTop="8dp">
 
-            <EditText
-                android:id="@+id/edit_card_details_website_et"
-                android:layout_width="129dp"
+                <ImageView
+                    android:id="@+id/edit_card_details_email_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/baseline_mail_outline_black_18dp" />
+
+                <TextView
+                    android:id="@+id/edit_card_details_email_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Email" />
+
+                <EditText
+                    android:id="@+id/edit_card_details_email_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:text="MyWebsite"
-                app:layout_constraintStart_toEndOf="@+id/edit_card_details_website_label"
-                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_email_et" />
+                android:layout_marginTop="8dp">
 
-            <TextView
-                android:id="@+id/edit_card_details_email_label"
-                android:layout_width="wrap_content"
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="0dip"
+                    android:layout_marginRight="8dp"
+                    android:background="#e4e6e8ff" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="8dp"
+                    android:background="#e4e6e8" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="#e4e6e8"
+                    android:paddingRight="2dip" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:text="Email"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_email_et"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit_card_details_email_et" />
+                android:layout_marginTop="8dp">
 
-            <TextView
-                android:id="@+id/edit_card_details_company_label"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/edit_card_details_company_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/baseline_account_balance_black_18dp" />
+
+                <TextView
+                    android:id="@+id/edit_card_details_company_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Company" />
+
+                <EditText
+                    android:id="@+id/edit_card_details_company_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:text="Company"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_company_et"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit_card_details_company_et" />
+                android:layout_marginTop="8dp">
 
-            <TextView
-                android:id="@+id/edit_card_details_address_label"
-                android:layout_width="wrap_content"
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="0dip"
+                    android:layout_marginRight="8dp"
+                    android:background="#e4e6e8ff" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="8dp"
+                    android:background="#e4e6e8" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="#e4e6e8"
+                    android:paddingRight="2dip" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:text="Address"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_card_details_address_et"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit_card_details_address_et" />
+                android:layout_marginTop="8dp">
 
-            <Button
-                android:id="@+id/edit_card_details_save_bt"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/edit_card_details_address_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/baseline_location_on_black_18dp" />
+
+                <TextView
+                    android:id="@+id/edit_card_details_address_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Address" />
+
+                <EditText
+                    android:id="@+id/edit_card_details_address_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Save"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_card_details_website_et" />
+                android:layout_marginTop="8dp">
 
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="0dip"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:background="#e4e6e8ff" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:background="#e4e6e8" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_weight="1"
+                    android:background="#e4e6e8"
+                    android:paddingRight="2dip" />
+            </TableRow>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:id="@+id/edit_card_details_website_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/baseline_language_black_18dp" />
+
+                <TextView
+                    android:id="@+id/edit_card_details_website_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Website" />
+
+                <EditText
+                    android:id="@+id/edit_card_details_website_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1" />
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>
