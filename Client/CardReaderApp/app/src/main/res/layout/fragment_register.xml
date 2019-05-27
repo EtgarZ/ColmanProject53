@@ -44,7 +44,7 @@
             android:id="@+id/Register_passwordtxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Pass"
+            android:hint="Password"
             android:inputType="textPassword"
             android:textAlignment="viewStart"
             android:layout_gravity="start"/>

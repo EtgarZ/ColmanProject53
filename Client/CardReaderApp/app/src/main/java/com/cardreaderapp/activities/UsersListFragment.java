@@ -114,7 +114,8 @@ public class UsersListFragment extends Fragment {
 
                     User user = new User(name, email, isPro, token, cards);
                     mHashMap.put(ds.getKey(), user);
-                    mData.add(user);
+                    if (!ds.getKey().equals(mCurrentUser.getUid()))
+                        mData.add(user);
                 }
                 mAdapter.notifyDataSetChanged();
                 prepareUIAfterLoading();

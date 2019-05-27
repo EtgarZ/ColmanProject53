@@ -43,7 +43,6 @@ public class NewCardFragment extends Fragment {
 
     private ImageView mIimageView;
     private Button mExtractInfoBtn;
-    private Button mPickBtn;
 
     private Uri mImageUri;
 
@@ -60,103 +59,29 @@ public class NewCardFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_new_card, container, false);
 
-
-        Button btnAddCard = v.findViewById(R.id.btnAddCard);
         mIimageView = v.findViewById(R.id.imageView);
         mExtractInfoBtn = v.findViewById(R.id.btnExtractInfo);
-        mPickBtn = v.findViewById(R.id.btnPickGallery);
 
-        btnAddCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSelectImageClick();
-            }
-        });
+        //onSelectImageClick();
 
-        mPickBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-            }
-        });
-
-        return v;
-    }
-
-    public void onSelectImageClick() {
-        // From docs :
-        // If image is blurred/low quality, You are probably using the thumbnail image.
-        // You need to set the EXTRA_OUTPUT to a path and camera will save the full image to this path.
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri outputFileUri = Uri.fromFile(new File(this.getContext().getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1024, 1024, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
-                //.setRequestedSize(400, 400)
-                //.start(this.getActivity());
-                .start(this.getContext(), this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK)
-        {
-            mExtractInfoBtn.setVisibility(View.INVISIBLE);
-            mIimageView.setImageResource(0); // clear image of image view control
-            String errorMessage = "You didn't select card!";
-            Toast.makeText(this.getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+        mImageUri = NewCardFragmentArgs.fromBundle(getArguments()).getImageUri();
+        mIimageView.setImageURI(mImageUri);
         try {
-            // handle result of CropImageActivity
-            if (requestCode ==  CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
-            {
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                if (resultCode == RESULT_OK) {
-                    mImageUri = result.getUri();
-                    mIimageView.setImageURI(mImageUri);
-                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), mImageUri);
-                    mExtractInfoBtn.setVisibility(View.VISIBLE);
-                    mExtractInfoBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            BackgroundTask myTask = new BackgroundTask();
-                            myTask.execute(galleryBitmap);
-                        }
-                    });
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Toast.makeText(this.getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+            final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), mImageUri);
+            mExtractInfoBtn.setVisibility(View.VISIBLE);
+            mExtractInfoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BackgroundTask myTask = new BackgroundTask();
+                    myTask.execute(galleryBitmap);
                 }
-            }
-            else if (requestCode == PICK_IMAGE)
-            {
-                try {
-                    mExtractInfoBtn.setVisibility(View.VISIBLE);
-                    mImageUri = data.getData();
-                    mIimageView.setImageURI(mImageUri);
-                    final Bitmap galleryBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), mImageUri);
-                    mExtractInfoBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            BackgroundTask myTask = new BackgroundTask();
-                            myTask.execute(galleryBitmap);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (IOException e) {
+            });
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
+
+        return v;
     }
 
     private Card extractCardData(Bitmap bitmap){
@@ -218,10 +143,6 @@ public class NewCardFragment extends Fragment {
                 return;
             }
             navigateEditCardDetails(card, mImageUri);
-            //openContact(card);
         }
-
-
     }
-
 }

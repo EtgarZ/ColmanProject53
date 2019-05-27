@@ -1,5 +1,7 @@
 package com.cardreaderapp.activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,10 +9,13 @@ import android.os.Bundle;
 import com.cardreaderapp.models.Card;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +32,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
+
+import static android.app.Activity.RESULT_OK;
 
 public class CardsListFragment extends Fragment {
     CardsListAdapter mAdapter;
@@ -131,7 +142,15 @@ public class CardsListFragment extends Fragment {
         });
 
         mAddCardBtn = view.findViewById(R.id.cards_list_add_bt);
-        mAddCardBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_newCardFragment));
+        //mAddCardBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_newCardFragment));
+        mAddCardBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onSelectImageClick();
+                    }
+                }
+        );
 
         mShareCardsBtn = view.findViewById(R.id.cards_list_share_bt);
         mShareCardsBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_usersListFragment));
@@ -139,6 +158,47 @@ public class CardsListFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.cards_list_pb);
         mProgressBar.setVisibility(View.INVISIBLE);
         return view;
+    }
+
+    public void onSelectImageClick() {
+        // From docs :
+        // If image is blurred/low quality, You are probably using the thumbnail image.
+        // You need to set the EXTRA_OUTPUT to a path and camera will save the full image to this path.
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri outputFileUri = Uri.fromFile(new File(this.getContext().getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(1024, 1024, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
+                //.setRequestedSize(400, 400)
+                //.start(this.getActivity());
+                .start(this.getContext(), this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK)
+            return;
+
+        try {
+            // handle result of CropImageActivity
+            if (requestCode ==  CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+            {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    CardsListFragmentDirections.ActionCardsListFragmentToNewCardFragment action =
+                            CardsListFragmentDirections.actionCardsListFragmentToNewCardFragment(result.getUri());
+                    Navigation.findNavController(getView()).navigate(action);
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Toast.makeText(this.getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

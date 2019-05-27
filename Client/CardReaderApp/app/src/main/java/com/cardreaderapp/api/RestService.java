@@ -104,7 +104,8 @@ public class RestService implements ICard {
         //String yourURL = "https://us-central1-business-card-reader-230419.cloudfunctions.net/handler/users/555/images";
         //String yourURL = "http://34.73.212.169:5000";
         //String yourURL = "http://35.242.230.60:5000";
-        String yourURL = "http://35.242.227.217:5000";
+        //String yourURL = "http://35.242.227.217:5000";
+        String yourURL = "http://35.242.214.13:5000";
 
         try {
             JSONObject jsonObject = new JSONObject();

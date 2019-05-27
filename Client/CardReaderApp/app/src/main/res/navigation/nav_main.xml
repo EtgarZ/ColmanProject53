@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_newCardFragment_to_editCardDetailsFragment"
             app:destination="@id/editCardDetailsFragment" />
+        <argument
+            android:name="ImageUri"
+            app:argType="android.net.Uri" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
