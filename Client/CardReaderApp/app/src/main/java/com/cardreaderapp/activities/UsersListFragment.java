@@ -49,8 +49,6 @@ public class UsersListFragment extends Fragment {
 
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-
-    DatabaseReference mDatabaseRef;
     FirebaseUser mCurrentUser;
     private String mTargetUserId;
 
@@ -97,21 +95,6 @@ public class UsersListFragment extends Fragment {
                         }
                     }
 
-//                    Vector<Share> shares = new Vector<Share>();
-//                    if (ds.hasChild("Shares")){
-//                        for (DataSnapshot cs: ds.child("Shares").getChildren()) {
-//                            Share s = new Share();
-//                            c.setPersonName(cs.child("personName").getValue().toString());
-//                            c.setPhoneNumber(cs.child("phoneNumber").getValue().toString());
-//                            c.setCompany(cs.child("company").getValue().toString());
-//                            c.setAddress(cs.child("address").getValue().toString());
-//                            c.setEmail(cs.child("email").getValue().toString());
-//                            c.setWebsite(cs.child("website").getValue().toString());
-//                            c.setImageUri(cs.child("imageUri").getValue().toString());
-//                            cards.add(c);
-//                        }
-//                    }
-
                     User user = new User(name, email, isPro, token, cards);
                     mHashMap.put(ds.getKey(), user);
                     if (!ds.getKey().equals(mCurrentUser.getUid()))
@@ -150,7 +133,6 @@ public class UsersListFragment extends Fragment {
             @Override
             public void onClick(int index) {
                 Log.d("TAG","user item click: " + index);
-                //Navigation.findNavController(view).navigate(R.id.action_cardsListFragment_to_cardDetailsFragment);
                 final User user = mData.elementAt(index);
 
                 for (Map.Entry<String, User> entry: mHashMap.entrySet())
@@ -170,7 +152,6 @@ public class UsersListFragment extends Fragment {
                                 String sender = mCurrentUser.getUid();
                                 Share share = new Share(sender, cards);
 
-                                //UpdateTargetUserId(user);
                                 String shareId = FirebaseDatabase.getInstance().getReference("Users/" + mTargetUserId + "/Shares").push().getKey();
                                 FirebaseDatabase.getInstance().getReference("Users/" + mTargetUserId + "/Shares").child(shareId).setValue(share);
 
@@ -187,9 +168,6 @@ public class UsersListFragment extends Fragment {
                 builder.setMessage("You are about to share your cards with " + user.getName() + ".\nConfirm to proceed")
                         .setPositiveButton("Confirm", dialogClickListener)
                         .setNegativeButton("Cancel", dialogClickListener).show();
-
-
-//                Navigation.findNavController(view).navigate(action);
             }
         });
 
@@ -197,77 +175,6 @@ public class UsersListFragment extends Fragment {
         mProgressBar.setVisibility(View.INVISIBLE);
 
         return view;
-    }
-
-
-    private void UpdateTargetUserId(final User user){
-
-        Query queryRef = FirebaseDatabase.getInstance().getReference("Users").orderByChild("name").equalTo(user.getName());
-
-        queryRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //TODO auto generated
-                mTargetUserId = dataSnapshot.getKey();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                //TODO auto generated;
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                //TODO auto generated;
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                //TODO auto generated
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //TODO auto generated
-            }
-        });
-
-//        FirebaseDatabase.getInstance().getReference("Users").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot val : dataSnapshot.getChildren()){
-//
-//                    if (val.child("name").getValue().equals(user.getName())
-//                            && val.child("email").getValue().equals(user.getEmail())
-//                            && val.child("token").getValue().equals(user.getToken())){
-//                        mTargetUserId = val.getKey();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//        FirebaseDatabase.getInstance().getReference("Users").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    if (ds.child("name").getValue().toString().equals(user.getName())
-//                    && ds.child("email").getValue().toString().equals(user.getEmail())
-//                    && ds.child("token").getValue().toString().equals(user.getToken())){
-//                        mTargetUserId = ds.getKey();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Toast.makeText(getActivity(),"Fetching card data failed: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        });
     }
 
     @Override
@@ -297,7 +204,6 @@ public class UsersListFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
         }
     }
 }

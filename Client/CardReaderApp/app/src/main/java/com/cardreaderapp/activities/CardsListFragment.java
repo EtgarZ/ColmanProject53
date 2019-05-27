@@ -1,7 +1,6 @@
 package com.cardreaderapp.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,14 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Vector;
 
 import static android.app.Activity.RESULT_OK;
@@ -47,8 +44,6 @@ public class CardsListFragment extends Fragment {
 
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-
-    DatabaseReference  mDatabaseRef;
      FirebaseUser mUserDetails;
     private FloatingActionButton mAddCardBtn;
     private FloatingActionButton mShareCardsBtn;
@@ -57,8 +52,6 @@ public class CardsListFragment extends Fragment {
 
     public CardsListFragment() {
         // Required empty public constructor
-
-
     }
 
     private void prepareUIForLoading(){
@@ -142,7 +135,6 @@ public class CardsListFragment extends Fragment {
         });
 
         mAddCardBtn = view.findViewById(R.id.cards_list_add_bt);
-        //mAddCardBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_cardsListFragment_to_newCardFragment));
         mAddCardBtn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -157,6 +149,7 @@ public class CardsListFragment extends Fragment {
 
         mProgressBar = view.findViewById(R.id.cards_list_pb);
         mProgressBar.setVisibility(View.INVISIBLE);
+
         return view;
     }
 

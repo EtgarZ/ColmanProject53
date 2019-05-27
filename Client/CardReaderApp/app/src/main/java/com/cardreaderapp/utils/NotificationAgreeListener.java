@@ -36,11 +36,10 @@ public class NotificationAgreeListener extends BroadcastReceiver {
 
     private void addCards()
     {
-        final Vector<Card> cards = new Vector<>();
         FirebaseDatabase.getInstance().getReference("Users/" + mFromUserId + "/Cards").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                Vector<Card> cards = new Vector<>();
                 for (DataSnapshot cs : dataSnapshot.getChildren()) {
 
                         Card c = new Card();
@@ -52,7 +51,6 @@ public class NotificationAgreeListener extends BroadcastReceiver {
                         c.setWebsite(cs.child("website").getValue().toString());
                         c.setImageUri(cs.child("imageUri").getValue().toString());
                         cards.add(c);
-
                 }
 
                 for(Card card: cards){
