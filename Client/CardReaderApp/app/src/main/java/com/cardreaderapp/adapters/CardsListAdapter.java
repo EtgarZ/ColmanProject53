@@ -13,6 +13,7 @@ import com.cardreaderapp.R;
 import com.cardreaderapp.models.Card;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.Vector;
 
 public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.CardRowViewHolder> {
@@ -78,7 +79,10 @@ public class CardsListAdapter extends RecyclerView.Adapter<CardsListAdapter.Card
         public void bind(Card card){
             mName.setText(card.getPersonName());
             mPhone.setText(card.getPhoneNumber());
-            Picasso.with(itemView.getContext()).load(card.getImageUri())
+
+            File f = new File(card.getImageUri());
+
+            Picasso.with(itemView.getContext()).load(f)
                     .fit().centerCrop().into(mAvatar);
         }
     }

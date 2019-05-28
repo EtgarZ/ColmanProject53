@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -198,8 +199,8 @@ public class CardDetailsFragment extends Fragment  {
         mAddress.setText(address);
         mEmail.setText(email);
         mWebsite.setText(website);
-        Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
-
+        File f = new File(mImageUri.toString());
+        Picasso.with(this.getContext()).load(f).fit().into(mImageView);
         return view;
     }
 

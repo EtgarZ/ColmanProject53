@@ -1,13 +1,19 @@
 package com.cardreaderapp.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.cardreaderapp.models.Card;
+import com.cardreaderapp.utils.ImageStorageHandler;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -15,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
+import android.util.DebugUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +37,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 import static android.app.Activity.RESULT_OK;
@@ -83,7 +96,11 @@ public class CardsListFragment extends Fragment {
                     c.setAddress(ds.child("address").getValue().toString());
                     c.setEmail(ds.child("email").getValue().toString());
                     c.setWebsite(ds.child("website").getValue().toString());
-                    c.setImageUri(ds.child("imageUri").getValue().toString());
+
+
+
+                    String uri=CheckForImageInStorageAndLoad(ds.child("imageUri").getValue().toString());
+                    c.setImageUri(uri);
                     mData.add(c);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -96,6 +113,26 @@ public class CardsListFragment extends Fragment {
             }
         });
     }
+
+    private String CheckForImageInStorageAndLoad(String imageUri) {
+        final String fileName = ImageStorageHandler.getFileName(Uri.parse(imageUri), getContext());
+        File directory = getContext().getFilesDir();
+        File file = new File(directory, fileName);
+        try {
+            if (!file.exists()) {
+                ImageStorageHandler.insertInPrivateStorage(fileName, imageUri, getContext());
+
+                //        file = new File(directory, fileName);
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  file.getAbsolutePath();
+
+        }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,7 +147,6 @@ public class CardsListFragment extends Fragment {
 
         mAdapter = new CardsListAdapter(mData);
         mRecyclerView.setAdapter(mAdapter);
-
         mUserDetails=FirebaseAuth.getInstance().getCurrentUser();
 
         // TODO: Navigate to cardDetails fragment
