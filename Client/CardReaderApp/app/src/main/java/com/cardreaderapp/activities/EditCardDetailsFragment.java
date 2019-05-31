@@ -38,7 +38,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -122,9 +121,8 @@ public class EditCardDetailsFragment extends Fragment {
         mAddress.setText(address);
         mEmail.setText(email);
         mWebsite.setText(website);
-
-        File f = new File(mImageUri.toString());
-        Picasso.with(this.getContext()).load(f).fit().into(mImageView);
+        //Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
+        Picasso.with(this.getContext()).load(mImageUri).fit().into(mImageView);
 
         return view;
     }
