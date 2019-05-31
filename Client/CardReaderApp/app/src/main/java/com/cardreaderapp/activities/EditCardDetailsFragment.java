@@ -114,14 +114,12 @@ public class EditCardDetailsFragment extends Fragment {
         mEmail = view.findViewById(R.id.edit_card_details_email_et);
         mWebsite = view.findViewById(R.id.edit_card_details_website_et);
 
-        mImageView.setImageURI(mImageUri);
         mName.setText(name);
         mPhone.setText(phone);
         mCompany.setText(company);
         mAddress.setText(address);
         mEmail.setText(email);
         mWebsite.setText(website);
-        //Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
         Picasso.with(this.getContext()).load(mImageUri).fit().into(mImageView);
 
         return view;

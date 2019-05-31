@@ -198,7 +198,7 @@ public class CardDetailsFragment extends Fragment  {
         mAddress.setText(address);
         mEmail.setText(email);
         mWebsite.setText(website);
-        Picasso.with(this.getContext()).load(mImageUri).fit().centerCrop().into(mImageView);
+        Picasso.with(this.getContext()).load(mImageUri).fit().into(mImageView);
 
         return view;
     }
