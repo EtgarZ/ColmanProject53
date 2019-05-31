@@ -2,10 +2,12 @@ package com.cardreaderapp.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -15,15 +17,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.models.User;
+import com.cardreaderapp.utils.FileUtils;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,12 +37,20 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -56,11 +70,20 @@ public class RegisterFragment extends Fragment {
     EditText mEmailtxt;
     EditText mPasswordtxt;
     EditText mNameTxt;
-    CheckBox mIsProCb;
     Button mRegisterbtn;
     TextView mTitletxt;
     TextView mSwitchRegSignIntxt;
     ProgressDialog mProgressDialog;
+    FloatingActionButton mAddPictureBt;
+    ImageView mUserImageView;
+    Uri mUserImageUri;
+    ImageView mLogoImageView;
+
+    String mName;
+    String mEmail;
+    String mPassword;
+    Boolean mIsPro;
+
     FirebaseAuth mFireBashAuth;
     DatabaseReference mDatabaseRef;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -114,30 +137,44 @@ public class RegisterFragment extends Fragment {
         mFireBashAuth=FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users");
 
+        mLogoImageView = view.findViewById(R.id.register_logo_image_view);
         //mTitletxt = view.findViewById(R.id.Register_Titlettxt);
         mNameTxt = view.findViewById(R.id.Register_name_txt);
         mEmailtxt = view.findViewById(R.id.Register_emailtxt);
         mPasswordtxt = view.findViewById(R.id.Register_passwordtxt);
-        mIsProCb = view.findViewById(R.id.Register_isPro_cb);
         mRegisterbtn = view.findViewById(R.id.Register_registerBtn);
         mSwitchRegSignIntxt = view.findViewById(R.id.Register_switchRegisterSignIn);
+        mAddPictureBt = view.findViewById(R.id.register_add_picture_bt);
+        mUserImageView = view.findViewById(R.id.register_user_image_view);
+        mUserImageUri = null;
+
+
+
+        mAddPictureBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectProfilePicture();
+            }
+        });
 
         mSwitchRegSignIntxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mIsSignIn) {
                     mRegisterbtn.setText("Register");
-                    //mTitletxt.setText("User Registration");
                     mNameTxt.setVisibility(View.VISIBLE);
-                    mIsProCb.setVisibility(View.VISIBLE);
+                    mUserImageView.setVisibility(View.VISIBLE);
+                    mAddPictureBt.show();
+                    mLogoImageView.setVisibility(View.GONE);
                     mSwitchRegSignIntxt.setText("have an account? Sign in here");
                     getActivity().setTitle("Register");
                 }
                 else {
                     mRegisterbtn.setText("Login");
-                    //mTitletxt.setText("User Login");
                     mNameTxt.setVisibility(View.GONE);
-                    mIsProCb.setVisibility(View.GONE);
+                    mUserImageView.setVisibility(View.GONE);
+                    mAddPictureBt.hide();
+                    mLogoImageView.setVisibility(View.VISIBLE);
                     mSwitchRegSignIntxt.setText("Not have an account? Register here");
                     getActivity().setTitle("Login");
                 }
@@ -147,12 +184,12 @@ public class RegisterFragment extends Fragment {
         mRegisterbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Boolean isPro = mIsProCb.isChecked();
-                final String name = mNameTxt.getText().toString();
-                final String email = mEmailtxt.getText().toString().trim();
-                String password = mPasswordtxt.getText().toString().trim();
+                mIsPro = false;// mIsProCb.isChecked();
+                mName = mNameTxt.getText().toString();
+                mEmail = mEmailtxt.getText().toString().trim();
+                mPassword = mPasswordtxt.getText().toString().trim();
 
-                if(!isFormValid(name, email, password))
+                if(!isFormValid(mName, mEmail, mPassword))
                     return;
 
                 mProgressDialog.setMessage("Registering user...");
@@ -160,23 +197,19 @@ public class RegisterFragment extends Fragment {
                 if(!mIsSignIn) {
                     mProgressDialog.setMessage("Registering user...");
                     mProgressDialog.show();
-                    mFireBashAuth.createUserWithEmailAndPassword(email, password).
+                    mFireBashAuth.createUserWithEmailAndPassword(mEmail, mPassword).
                             addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        // create user in DB
-                                        final FirebaseUser currentUser = mFireBashAuth.getCurrentUser();
-                                        User user = new User(name, email, isPro, FirebaseInstanceId.getInstance().getToken());
-                                        mDatabaseRef.child(currentUser.getUid()).setValue(user);
-                                        mProgressDialog.dismiss();
-                                        //register completed and logged in.
-                                        Toast.makeText(getActivity(), "Registeraion Successfull!", Toast.LENGTH_LONG).show();
-                                        Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_cardsListFragment);
+                                        // if user image chosen - upload to firebase sorage
+                                        if (mUserImageUri != null)
+                                            uploadFile();
+                                        else
+                                            saveUser(null);
                                     } else {
                                         mProgressDialog.dismiss();
                                         Toast.makeText(getActivity(), "Registeraion Failed! pls try again later...", Toast.LENGTH_LONG).show();
-
                                     }
 
                                 }
@@ -191,7 +224,7 @@ public class RegisterFragment extends Fragment {
                 else {
                     mProgressDialog.setMessage("Login user...");
                     mProgressDialog.show();
-                    mFireBashAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    mFireBashAuth.signInWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -221,12 +254,80 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
-    private Boolean isFormValid(String name, String email, String password){
-        if (!mIsSignIn && name.isEmpty()) {
-            Toast.makeText(getActivity(), "Must enter your name!", Toast.LENGTH_LONG).show();
-            return false;
-        }
+    private void selectProfilePicture()
+    {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(1024, 1024, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
+                .start(getActivity(),this);
+    }
 
+    private void uploadFile()
+    {
+        String userId = mFireBashAuth.getCurrentUser().getUid();
+        final StorageReference fileRef = FirebaseStorage.getInstance().getReference("Uploads/" + userId + "/ProfilePics")
+                .child(System.currentTimeMillis() + "." + FileUtils.getFileExtension(mUserImageUri));
+        UploadTask uploadTask = fileRef.putFile(mUserImageUri);
+        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return fileRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    Toast.makeText(getActivity(), "Upload successfully!", Toast.LENGTH_SHORT).show();
+                    saveUser(downloadUri.toString());
+                } else {
+                    Toast.makeText(getActivity(), "Something got wrong.. pls try again", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void saveUser(String imageUri)
+    {
+        // create user in DB
+        final FirebaseUser currentUser = mFireBashAuth.getCurrentUser();
+        User user = new User(mName, mEmail, mIsPro, FirebaseInstanceId.getInstance().getToken(), imageUri);
+        String userId = currentUser.getUid();
+        mDatabaseRef.child(userId).setValue(user);
+        mProgressDialog.dismiss();
+        //register completed and logged in.
+        Toast.makeText(getActivity(), "Registeraion Successfull!", Toast.LENGTH_LONG).show();
+        Navigation.findNavController(this.getView()).navigate(R.id.action_registerFragment_to_cardsListFragment);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK)
+            return;
+
+        try {
+            // handle result of CropImageActivity
+            if (requestCode ==  CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+            {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    mUserImageUri = result.getUri();
+                    Picasso.with(this.getContext()).load(mUserImageUri).fit().into(mUserImageView);
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Toast.makeText(this.getActivity(), "Profile cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Boolean isFormValid(String name, String email, String password){
         if (email.isEmpty() || !VALID_EMAIL_ADDRESS_REGEX.matcher(email).find()) {
             Toast.makeText(getActivity(), "Email or Password is not valid!", Toast.LENGTH_LONG).show();
             return false;
@@ -234,6 +335,11 @@ public class RegisterFragment extends Fragment {
 
         if (password.isEmpty() || password.length()<6){
             Toast.makeText(getActivity(), "Must enter at least 6 chars length password!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (!mIsSignIn && name.isEmpty()) {
+            Toast.makeText(getActivity(), "Must enter your name!", Toast.LENGTH_LONG).show();
             return false;
         }
 

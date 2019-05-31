@@ -1,5 +1,6 @@
 package com.cardreaderapp.adapters;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,8 +74,10 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
 
         public void bind(User user){
             mName.setText(user.getName());
-//            Picasso.with(itemView.getContext()).load(card.getImageUri())
-//                    .fit().centerCrop().into(mAvatar);
+            if (user.getImageUri() != null)
+                Picasso.with(itemView.getContext()).load(user.getImageUri()).fit().into(mAvatar);
+            else
+                mAvatar.setImageResource(R.drawable.user_default_image);
         }
     }
 }

@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.cardreaderapp.R;
 import com.cardreaderapp.models.Card;
+import com.cardreaderapp.utils.FileUtils;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -125,10 +126,6 @@ public class EditCardDetailsFragment extends Fragment {
         return view;
     }
 
-    private String getFileExtension(Uri uri){
-        return MimeTypeMap.getFileExtensionFromUrl(uri.toString());
-    }
-
     private void SaveCard(Uri downloadUri){
         final String name =  mName.getText().toString();
         final String phone =  mPhone.getText().toString();
@@ -185,7 +182,7 @@ public class EditCardDetailsFragment extends Fragment {
 
     private void UploadFile(){
 
-        final StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
+        final StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + FileUtils.getFileExtension(mImageUri));
         UploadTask uploadTask = fileRef.putFile(mImageUri);
         uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override

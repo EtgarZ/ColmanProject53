@@ -79,6 +79,9 @@ public class UsersListFragment extends Fragment {
                     String name = ds.child("name").getValue().toString();
                     String email = ds.child("email").getValue().toString();
                     String token = ds.child("token").getValue().toString();
+                    String imageUri = null;
+                    if (ds.child("imageUri").getValue() != null)
+                        imageUri = ds.child("imageUri").getValue().toString();
                     Boolean isPro = Boolean.valueOf(ds.child("pro").getValue().toString());
                     Vector<Card> cards = new Vector<>();
                     if (ds.hasChild("Cards")){
@@ -95,7 +98,7 @@ public class UsersListFragment extends Fragment {
                         }
                     }
 
-                    User user = new User(name, email, isPro, token, cards);
+                    User user = new User(name, email, isPro, token, imageUri, cards);
                     mHashMap.put(ds.getKey(), user);
                     if (!ds.getKey().equals(mCurrentUser.getUid()))
                         mData.add(user);
