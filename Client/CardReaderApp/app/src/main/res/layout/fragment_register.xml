@@ -56,9 +56,10 @@
             android:layout_marginBottom="8dp"
             android:clickable="true"
             android:visibility="gone"
+            android:tint="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="@+id/register_user_image_view"
             app:layout_constraintEnd_toStartOf="@+id/register_user_image_view"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
+            app:srcCompat="@drawable/camera_icon_white" />
 
 
         <!-- Email Label -->
