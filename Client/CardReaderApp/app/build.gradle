@@ -47,6 +47,5 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.+'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
-
 }
 apply plugin: 'com.google.gms.google-services'
