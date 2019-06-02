@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +18,49 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Vector;
 
-public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UserRowViewHolder> {
+public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UserRowViewHolder> implements Filterable {
     public static Vector<User> mData;
+    public static Vector<User> mfilterdData;
+
     UsersListAdapter.OnItemClickListener mListener;
 
     public UsersListAdapter(Vector<User> data) {
         mData = data;
+        mfilterdData=data;
     }
+
+    @Override
+    public Filter getFilter() {
+       return  new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString=constraint.toString();
+                if(charString.isEmpty())
+                {
+                    mfilterdData=mData;
+                }
+                else
+                {
+                    Vector<User> filtering =new Vector<>();
+                    for (User user: mData ) {
+                        if(user.getName().toLowerCase().contains(charString))
+                            filtering.add(user);
+                    }
+                    mfilterdData=filtering;
+                }
+                FilterResults results=new FilterResults();
+                results.values=mfilterdData;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mfilterdData=(Vector<User>)results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
     public interface OnItemClickListener{
         void onClick(int index);
     }
@@ -41,13 +79,13 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
 
     @Override
     public void onBindViewHolder(@NonNull UsersListAdapter.UserRowViewHolder userRowViewHolder, int i) {
-        User user = mData.elementAt(i);
+        User user = mfilterdData.elementAt(i);
         userRowViewHolder.bind(user);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mfilterdData.size();
     }
 
     class UserRowViewHolder extends RecyclerView.ViewHolder {

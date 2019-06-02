@@ -2,6 +2,8 @@ package com.cardreaderapp.activities;
 
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,9 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.cardreaderapp.R;
@@ -53,7 +59,7 @@ public class UsersListFragment extends Fragment {
     private String mTargetUserId;
 
     private ProgressBar mProgressBar;
-
+    SearchView searchView;
     public UsersListFragment() {
         // Required empty public constructor
     }
@@ -177,9 +183,38 @@ public class UsersListFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.users_list_pb);
         mProgressBar.setVisibility(View.INVISIBLE);
 
+        setHasOptionsMenu(true);
+
         return view;
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_user_list, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.menu_user_list_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+    });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
     @Override
     public void onResume() {
         super.onResume();
