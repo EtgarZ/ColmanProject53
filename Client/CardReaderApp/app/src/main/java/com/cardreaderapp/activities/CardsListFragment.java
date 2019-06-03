@@ -150,7 +150,7 @@ public class CardsListFragment extends Fragment {
             public void onClick(int index) {
                 Log.d("TAG","item click: " + index);
                 //Navigation.findNavController(view).navigate(R.id.action_cardsListFragment_to_cardDetailsFragment);
-                Card card = mData.elementAt(index);
+                Card card =CardsListAdapter.filtered.elementAt(index);
                 CardsListFragmentDirections.ActionCardsListFragmentToCardDetailsFragment action =
                         CardsListFragmentDirections.actionCardsListFragmentToCardDetailsFragment(
                                 card.getPersonName(),
