@@ -142,7 +142,7 @@ public class UsersListFragment extends Fragment {
             @Override
             public void onClick(int index) {
                 Log.d("TAG","user item click: " + index);
-                final User user = mData.elementAt(index);
+                final User user = UsersListAdapter.mfilterdData.elementAt(index);
 
                 for (Map.Entry<String, User> entry: mHashMap.entrySet())
                 {
