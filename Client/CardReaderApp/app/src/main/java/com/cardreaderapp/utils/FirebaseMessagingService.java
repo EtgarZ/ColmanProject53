@@ -30,13 +30,16 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 
         String title = remoteMessage.getData().get("title");
+        String senderName = title.split(" ")[2];
         String body = remoteMessage.getData().get("body");
+
         String fromUserId = remoteMessage.getData().get("from_user_id");
         String toUserId = remoteMessage.getData().get("to_user_id");
 
         remoteViews = new RemoteViews(getPackageName(),R.layout.custom_notification);
         remoteViews.setImageViewResource(R.id.notif_icon,R.mipmap.ic_launcher);
-        remoteViews.setTextViewText(R.id.notif_title, title + ":" + body);
+        //remoteViews.setTextViewText(R.id.notif_title, title + ":" + body);
+        remoteViews.setTextViewText(R.id.notif_title, senderName + " shared contacts with you");
 
 
 
